@@ -1,5 +1,5 @@
 
-* init graphics
+* Init graphics
 
 gfxinit
  pshs d
@@ -29,7 +29,7 @@ gfxinit
 ; 0  Composite color phase invert: NO
 ; 0  Monochrome on composite video out: NO
 ; 0  50Hz video: NO
-; 00 Lines per row: one line per row		 ???
+; 00 Lines per row: one line per row
  ldb #$80
  stb $FF98
 
@@ -114,16 +114,16 @@ gfxpset
  rorb
  leau d,u ; u now points to screen byte
  tfr x,d
- andb #1
+ andb #1 ; left nibble or right nibble?
  leax bytetbl1,pcr
  leay bytetbl2,pcr
- lda ,u
+ lda ,u ; clear nibble
  anda b,x
  sta ,u
  lda ,s
  anda b,y
  ora ,u
- sta ,u
+ sta ,u ; set nibble to color
  leas 1,s
  puls x,y,u,d,pc
 

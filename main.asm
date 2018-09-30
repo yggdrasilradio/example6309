@@ -95,6 +95,13 @@ loop@
  ldb #$11 ; color
 loop@
  lbsr gfxpset
+ leax 1,x
+ lbsr gfxpset
+ leay 1,y
+ lbsr gfxpset
+ leax -1,x
+ lbsr gfxpset
+ leay -1,y
  leay 10,y
  addb #$11
  deca
