@@ -102,34 +102,23 @@ gfxcls
 ; Y is y 0-224
 ; B is color 0-15
 gfxpset
- pshs x,y,u,d
- pshs b
+ pshs d,u
  ldu #SCREEN
  tfr y,d
  lda #160
  mul
+ addr d,u ; u now points to beginning of row
+ tfr x,d
+ lsrd
  leau d,u ; u now points to beginning of row
- tfr x,d
- lsra
- rorb
- leau d,u ; u now points to screen byte
- tfr x,d
- andb #1 ; left nibble or right nibble?
- leax bytetbl1,pcr
- leay bytetbl2,pcr
- lda ,u ; clear nibble
- anda b,x
- sta ,u
- lda ,s
- anda b,y
- ora ,u
- sta ,u ; set nibble to color
- leas 1,s
- puls x,y,u,d,pc
-
-bytetbl1
- fcb $0F
- fcb $F0
-bytetbl2
- fcb $F0
- fcb $0F
+ lda 1,s ; color
+ ldb ,u ; screen byte
+ bcc even@
+ andd #$0FF0
+ bra cont@
+even@
+ andd #$F00F
+cont@
+ orr a,b  
+ stb ,u ; replace screen byte
+ puls d,u,pc
