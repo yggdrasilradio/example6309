@@ -26,11 +26,11 @@ start
  * 1.78 Mhz CPU
  lbsr fast
 
- * Init graphics
- lbsr gfxinit
-
  * Clear screen
  lbsr gfxcls
+
+ * Init graphics
+ lbsr gfxinit
 
  * Line from upper left to lower right
  ldx #46

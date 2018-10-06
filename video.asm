@@ -90,9 +90,9 @@ gfxinit
 ; Clear screen
 gfxcls
  clr ,-s
- ldx #SCREEN
+ ldu #SCREEN
  ldw #36000
- tfm s,x+
+ tfm s,u+
  leas 1,s
  rts
 
@@ -100,7 +100,7 @@ gfxcls
 ; 320 x 225, 16 colors
 ; X is x 0-320
 ; Y is y 0-224
-; B is color 0-15
+; B is color $00,$11,$22...$FF
 gfxpset
  pshs d,u
  ldu #SCREEN
