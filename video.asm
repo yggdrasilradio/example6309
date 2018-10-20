@@ -88,6 +88,7 @@ gfxinit
  puls d,pc
 
 ; Clear screen
+ IFDEF M6309
 gfxcls
  clr ,-s
  ldu #SCREEN
@@ -95,12 +96,39 @@ gfxcls
  tfm s,u+
  leas 1,s
  rts
+ ELSE
+gfxcls
+ ldu #SCREEN
+ ldx #1125
+ ldd #0
+loop@
+ std ,u++
+ std ,u++
+ std ,u++
+ std ,u++
+ std ,u++
+ std ,u++
+ std ,u++
+ std ,u++
+ std ,u++
+ std ,u++
+ std ,u++
+ std ,u++
+ std ,u++
+ std ,u++
+ std ,u++
+ std ,u++
+ leax -1,x
+ bne loop@
+ rts
+ ENDC
 
 ; Set pixel
 ; 320 x 225, 16 colors
 ; X is x 0-320
 ; Y is y 0-224
 ; B is color $00,$11,$22...$FF
+ IFDEF M6309
 gfxpset
  pshs d,u
  ldu #SCREEN
@@ -110,7 +138,7 @@ gfxpset
  addr d,u ; u now points to beginning of row
  tfr x,d
  lsrd
- leau d,u ; u now points to beginning of row
+ leau d,u ; u now points to screen byte
  lda 1,s ; color
  ldb ,u ; screen byte
  bcc even@
@@ -122,3 +150,30 @@ cont@
  orr a,b  
  stb ,u ; replace screen byte
  puls d,u,pc
+ ELSE
+gfxpset
+ pshs d,u
+ ldu #SCREEN
+ tfr y,d
+ lda #160
+ mul
+ leau d,u ; u now points to beginning of row
+ tfr x,d
+ lsra
+ rorb
+ leau d,u ; u now points to screen byte
+ lda 1,s ; color
+ ldb ,u ; screen byte
+ bcc even@
+ anda #$0F
+ andb #$F0
+ bra cont@
+even@
+ anda #$F0
+ andb #$0F
+cont@
+ pshs a
+ orb ,s+
+ stb ,u ; replace screen byte
+ puls d,u,pc
+ ENDC

@@ -1,5 +1,9 @@
  org $0
 
+seed rmb 2
+ssave rmb 2
+ff90 rmb 1
+
  org $1000
 STACK rmb 1
 
@@ -8,7 +12,9 @@ STACK rmb 1
 start
 
  * Enable 6309 native mode
+ IFDEF M6309
  lbsr enable6309
+ ENDC
 
  * Disable IRQ and FIRQ
  orcc #%01010000
@@ -25,6 +31,13 @@ start
 
  * 1.78 Mhz CPU
  lbsr fast
+
+ * Seed random number routine
+ ldd $112
+ bne no@ ; can't be zero
+ ldd #123
+no@
+ std seed
 
  * Clear screen
  lbsr gfxcls
@@ -90,7 +103,7 @@ loop@
 
  * Colored dots to show palette colors
  ldx #10
- ldy #10
+ ldy #12
  lda #15
  ldb #$11 ; color
 loop@
@@ -102,7 +115,7 @@ loop@
  leax -1,x
  lbsr gfxpset
  leay -1,y
- leay 10,y
+ leay 14,y
  addb #$11
  deca
  bne loop@
