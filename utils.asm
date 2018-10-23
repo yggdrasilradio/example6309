@@ -61,3 +61,45 @@ no@
  rol    seed        ; one more shift to complete the 16 bit shift
  ldd    seed        ; load up a and b with the new random seed
  rts
+
+hang
+ bra hang
+
+InitMMU
+ leau taskmap0,pcr
+ ldx #$ffa0
+ ldd ,u++
+ std ,x++
+ ldd ,u++
+ std ,x++
+ ldd ,u++
+ std ,x++
+ ldd ,u++
+ std ,x++
+ leau taskmap1,pcr
+ ldx #$ffa8
+ ldd ,u++
+ std ,x++
+ ldd ,u++
+ std ,x++
+ ldd ,u++
+ std ,x++
+ ldd ,u++
+ std ,x++
+ rts
+
+;Task 0: $38 $39 $3A $3B $3C $3D $3E $3F -- screen at GIME location $70000 (CPU address $6000)
+
+taskmap0
+ fdb $3839
+ fdb $3A3B
+ fdb $3C3D
+ fdb $3E3F
+
+;Task 1: $38 $39 $3A $33 $34 $35 $36 $37 -- screen at GIME location $66000 (CPU address $6000)
+
+taskmap1
+ fdb $3839
+ fdb $3A33
+ fdb $3435
+ fdb $3637

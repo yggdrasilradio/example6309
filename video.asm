@@ -1,18 +1,18 @@
 
-* Init graphics
+* Init CPU
 
-gfxinit
- pshs d
+cpuinit
+ pshs b
 
 ; INITIALIZATION REGISTER 0 $FF90
 ; 0    Coco 1/2 compatible: NO
-; 0    MMU enabled: NO
+; 1    MMU enabled: YES
 ; 0    GIME IRQ enabled: NO
 ; 0    GIME FIRQ enabled: NO
 ; 1    RAM at FExx is constant: YES
 ; 0    Standard SCS (spare chip select): OFF
 ; 00   ROM map control: 16k internal, 16K external
- ldb #$08
+ ldb #$48
  stb $FF90
 
 ; INITIALIZATION REGISTER 1 $FF91
@@ -22,7 +22,13 @@ gfxinit
 ; 0000 Unused
 ; 0    MMU task select 0=enable FFA0-FFA7, 1=enable FFA8-FFAF
  ldb #$60
+ sta $ff91
+ puls b,pc
 
+* Init Graphics
+
+gfxinit
+ pshs d
 ; VIDEO MODE REGISTER $FF98
 ; 1  Graphic mode: YES
 ; 0  Unused
@@ -40,11 +46,6 @@ gfxinit
 ; 10  CRES: 16 colors, 2 pixels per byte
  ldb #$7E
  stb $FF99
-
-; VERTICAL OFFSET REGISTERS $FF9D - $FF9E
- ldd #$EE00
- sta $FF9D	MSB = ($70000 + addr) / 2048
- stb $FF9E	LSB = (addr / 8) AND $ff
 
 ; HORIZONTAL OFFSET REGISTER $FF9F
  clr $FF9F
@@ -177,3 +178,39 @@ cont@
  stb ,u ; replace screen byte
  puls d,u,pc
  ENDC
+
+FlipScreens
+ sync
+ inc tick
+ lda tick
+ anda #1
+ bne task0@
+ lbsr Task0
+ lbsr Screen1
+ rts
+task0@
+ lbsr Task1
+ lbsr Screen0
+ rts
+
+Task0
+ ldb #$60	; switch to task 0
+ stb $FF91
+ rts
+
+Task1
+ ldb #$61	; switch to task 1
+ stb $FF91
+ rts
+
+Screen0
+ ldd #$EC00
+ sta $FF9D	; MSB = $76000 / 2048
+ stb $FF9E	; LSB = (addr / 8) AND $ff
+ rts
+
+Screen1
+ ldd #$CC00
+ sta $FF9D	; MSB = $66000 / 2048
+ stb $FF9E	; LSB = (addr / 8) AND $ff
+ rts

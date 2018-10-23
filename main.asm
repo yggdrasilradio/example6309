@@ -1,13 +1,12 @@
  org $0
 
 seed rmb 2
-ssave rmb 2
-ff90 rmb 1
+tick rmb 1
 
  org $1000
 STACK rmb 1
 
- org $3000
+ org $2000 ; was $3000
 
 start
 
@@ -32,6 +31,9 @@ start
  * 1.78 Mhz CPU
  lbsr fast
 
+ * Initialize MMU
+ lbsr InitMMU
+
  * Seed random number routine
  ldd $112
  bne no@ ; can't be zero
@@ -39,11 +41,22 @@ start
 no@
  std seed
 
- * Clear screen
- lbsr gfxcls
+ * Init CPU
+ lbsr cpuinit
 
  * Init graphics
  lbsr gfxinit
+
+ * Clear screens
+ lbsr Task0
+ lbsr gfxcls
+ lbsr Task1
+ lbsr gfxcls
+
+mainloop
+ lbsr FlipScreens
+
+ lbsr gfxcls
 
  * Line from upper left to lower right
  ldx #46
@@ -120,13 +133,13 @@ loop@
  deca
  bne loop@
 
- * Hang forever doing nothing
-loop
- bra loop
+ ;lbra hang
 
-SCREEN equ $7000
+ lbra mainloop
 
  incl video.asm
  incl utils.asm
+
+SCREEN EQU $6000
 
  end start
