@@ -103,3 +103,31 @@ taskmap1
  fdb $3A33
  fdb $3435
  fdb $3637
+
+* Disable IRQ and FIRQ
+DisableIRQ
+ orcc #%01010000
+ rts
+
+* Enable IRQ
+EnableIRQ
+ andcc #%10101111
+ rts
+
+InitIRQ
+ * Set IRQ interrupt vector
+ lda #$7e
+ sta $10c
+ leau IRQ,pcr
+ stu $10d
+
+ * Disable HSYNC
+ lda $ff01
+ anda #$fe
+ sta $ff01
+
+ * Enable VSYNC
+ lda $ff03
+ ora #$01
+ sta $ff03
+ rts

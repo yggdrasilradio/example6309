@@ -185,12 +185,12 @@ FlipScreens
  lda tick
  anda #1
  bne task0@
- lbsr Task0
  lbsr Screen1
+ lbsr Task0
  rts
 task0@
- lbsr Task1
  lbsr Screen0
+ lbsr Task1
  rts
 
 Task0

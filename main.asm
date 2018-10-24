@@ -2,6 +2,8 @@
 
 seed rmb 2
 tick rmb 1
+xpos rmb 2
+ypos rmb 2
 
  org $1000
 STACK rmb 1
@@ -16,7 +18,7 @@ start
  ENDC
 
  * Disable IRQ and FIRQ
- orcc #%01010000
+ lbsr DisableIRQ
 
  * Relocate stack
  lds #STACK
@@ -53,9 +55,17 @@ no@
  lbsr Task1
  lbsr gfxcls
 
+ * Initialize IRQ routine
+ lbsr InitIRQ
+
+ * Enable IRQ interrupts
+ lbsr EnableIRQ
+
 mainloop
+
  lbsr FlipScreens
 
+ * BEGIN SCREEN DRAWING
  lbsr gfxcls
 
  * Line from upper left to lower right
@@ -132,10 +142,15 @@ loop@
  addb #$11
  deca
  bne loop@
-
- ;lbra hang
+ * END SCREEN DRAWING
 
  lbra mainloop
+
+IRQ
+ orcc #%01010000  ; disable IRQ
+ tst $FF02	  ; dismiss interrupt
+ ;andcc #%10101111 ; enable IRQ
+ rti
 
  incl video.asm
  incl utils.asm
@@ -143,3 +158,4 @@ loop@
 SCREEN EQU $6000
 
  end start
+
