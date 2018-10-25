@@ -1,13 +1,11 @@
-IRQ routine?
+why is it so slow?
 
 interrupt driven sound
 
 interrupt driven keyboard polling
 
-sprites - scrolling
+interrupt driven joystick polling
 
-3D?
+scrolling sprites
 
 line routine?
-
-double buffering
