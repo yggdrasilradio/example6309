@@ -1,11 +1,11 @@
 
-all:	example6309
+all:	6309
 
-example6309: main.asm
+6309: main.asm
 	lwasm -DM6309 -3 -b -o EXAMPLE.BIN main.asm
 	decb copy -r -2 -b EXAMPLE.BIN /media/share1/COCO/drive0.dsk,EXAMPLE.BIN
 
-example6809: main.asm
+6809: main.asm
 	lwasm -DM6809 -9 -b -o EXAMPLE.BIN main.asm
 	decb copy -r -2 -b EXAMPLE.BIN /media/share1/COCO/drive0.dsk,EXAMPLE.BIN
 
