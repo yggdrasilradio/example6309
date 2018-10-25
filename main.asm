@@ -61,12 +61,18 @@ no@
  * Enable IRQ interrupts
  lbsr EnableIRQ
 
+ ldd #0
+ std xpos
+ std ypos
+
 mainloop
 
  lbsr FlipScreens
 
  * BEGIN SCREEN DRAWING
  lbsr gfxcls
+
+ inc xpos+1
 
  * Line from upper left to lower right
  ldx #46
@@ -125,8 +131,9 @@ loop@
  bne loop@
 
  * Colored dots to show palette colors
- ldx #10
- ldy #12
+ ldx xpos
+ leax 27,x
+ ldy #13
  lda #15
  ldb #$11 ; color
 loop@
