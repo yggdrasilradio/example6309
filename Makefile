@@ -13,4 +13,4 @@ clean:
 	rm -f *.bin
 
 backup:
-	tar -cvf backups/`date +%Y-%m-%d_%H-%M-%S`.tar Makefile *.asm
+	tar -cvf backups/`date +%Y-%m-%d_%H-%M-%S`.tar Makefile *.asm notes

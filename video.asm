@@ -89,40 +89,37 @@ gfxinit
  puls d,pc
 
 ; Clear screen
- IFDEF M6309
 gfxcls
- clr ,-s
- ldu #SCREEN
- ldw #36000
- tfm s,u+
- leas 1,s
- rts
- ELSE
-gfxcls
- ldu #SCREEN
- ldx #1125
+* Turn on border (DEBUG)
+ ;lda #100
+ ;sta $ff9a
+ ldu #SCREEN+36000
+ ldx #0
+ ldy #0
  ldd #0
 loop@
- std ,u++
- std ,u++
- std ,u++
- std ,u++
- std ,u++
- std ,u++
- std ,u++
- std ,u++
- std ,u++
- std ,u++
- std ,u++
- std ,u++
- std ,u++
- std ,u++
- std ,u++
- std ,u++
- leax -1,x
+ pshu d,x,y
+ pshu d,x,y
+ pshu d,x,y
+ pshu d,x,y
+ pshu d,x,y
+ pshu d,x,y
+ pshu d,x,y
+ pshu d,x,y
+ pshu d,x,y
+ pshu d,x,y
+ pshu d,x,y
+ pshu d,x,y
+ pshu d,x,y
+ pshu d,x,y
+ pshu d,x,y
+ pshu d,x,y
+ cmpu #SCREEN
  bne loop@
+* Turn off border (DEBUG)
+ ;lda #0
+ ;sta $ff9a
  rts
- ENDC
 
 ; Set pixel
 ; 320 x 225, 16 colors
@@ -214,3 +211,37 @@ Screen1
  sta $FF9D	; MSB = $66000 / 2048
  stb $FF9E	; LSB = (addr / 8) AND $ff
  rts
+
+* X xpos
+* Y ypos
+* A length
+* B color
+vline
+ pshs d,u
+ ldu #SCREEN
+ tfr y,d
+ lda #160
+ mul
+ leau d,u ; u now points to beginning of row
+ tfr x,d
+ lsra
+ rorb
+ leau d,u ; u now points to screen byte
+ lda 1,s ; color
+ ldb ,u ; screen byte
+ bcc even@
+ anda #$0F
+ andb #$F0
+ bra cont@
+even@
+ anda #$F0
+ andb #$0F
+cont@
+ pshs a
+ orb ,s+
+loop@
+ stb ,u ; replace screen byte
+ leau 160,u
+ dec ,s
+ bne loop@
+ puls d,u,pc

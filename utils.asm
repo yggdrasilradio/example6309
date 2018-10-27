@@ -1,3 +1,4 @@
+ IFDEF M6309
 enable6309
 ; MODE/ERROR REGISTER
 ; 0    Zero division error flag
@@ -5,7 +6,6 @@ enable6309
 ; 0000 Unused
 ; 1    FIRQ mode: same as IRQ
 ; 1    Execution mode: 6309 native mode
- IFDEF M6309
  ldmd #$03
  rts
  ENDC
@@ -88,7 +88,7 @@ InitMMU
  std ,x++
  rts
 
-;Task 0: $38 $39 $3A $3B $3C $3D $3E $3F -- screen at GIME location $70000 (CPU address $6000)
+;Task 0: $38 $39 $3A $3B $3C $3D $3E $3F
 
 taskmap0
  fdb $3839
@@ -96,7 +96,7 @@ taskmap0
  fdb $3C3D
  fdb $3E3F
 
-;Task 1: $38 $39 $3A $33 $34 $35 $36 $37 -- screen at GIME location $66000 (CPU address $6000)
+;Task 1: $38 $39 $3A $33 $34 $35 $36 $37
 
 taskmap1
  fdb $3839

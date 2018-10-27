@@ -1,14 +1,16 @@
  org $0
 
+vsync rmb 1
 seed rmb 2
 tick rmb 1
 xpos rmb 2
 ypos rmb 2
 
  org $1000
+
 STACK rmb 1
 
- org $2000 ; was $3000
+ org $2000
 
 start
 
@@ -43,6 +45,9 @@ start
 no@
  std seed
 
+ * Clear VSYNC flag
+ clr vsync
+
  * Init CPU
  lbsr cpuinit
 
@@ -69,10 +74,12 @@ mainloop
 
  lbsr FlipScreens
 
+* Turn on border (DEBUG)
+ ;lda #100
+ ;sta $ff9a
+
  * BEGIN SCREEN DRAWING
  lbsr gfxcls
-
- inc xpos+1
 
  * Line from upper left to lower right
  ldx #46
@@ -130,7 +137,8 @@ loop@
  deca
  bne loop@
 
- * Colored dots to show palette colors
+ * Moving colored dots to show palette colors
+ inc xpos+1
  ldx xpos
  leax 27,x
  ldy #13
@@ -151,12 +159,17 @@ loop@
  bne loop@
  * END SCREEN DRAWING
 
+* Turn off border (DEBUG)
+ ;lda #0
+ ;sta $ff9a
+
  lbra mainloop
 
 IRQ
  orcc #%01010000  ; disable IRQ
+ inc vsync	  ; set VSYNC flag
  tst $FF02	  ; dismiss interrupt
- ;andcc #%10101111 ; enable IRQ
+ andcc #%10101111 ; enable IRQ
  rti
 
  incl video.asm
@@ -165,4 +178,3 @@ IRQ
 SCREEN EQU $6000
 
  end start
-
