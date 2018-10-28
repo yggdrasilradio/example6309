@@ -211,37 +211,3 @@ Screen1
  sta $FF9D	; MSB = $66000 / 2048
  stb $FF9E	; LSB = (addr / 8) AND $ff
  rts
-
-* X xpos
-* Y ypos
-* A length
-* B color
-vline
- pshs d,u
- ldu #SCREEN
- tfr y,d
- lda #160
- mul
- leau d,u ; u now points to beginning of row
- tfr x,d
- lsra
- rorb
- leau d,u ; u now points to screen byte
- lda 1,s ; color
- ldb ,u ; screen byte
- bcc even@
- anda #$0F
- andb #$F0
- bra cont@
-even@
- anda #$F0
- andb #$0F
-cont@
- pshs a
- orb ,s+
-loop@
- stb ,u ; replace screen byte
- leau 160,u
- dec ,s
- bne loop@
- puls d,u,pc
