@@ -30,21 +30,21 @@ cpuinit
 gfxinit
  pshs d
 ; VIDEO MODE REGISTER $FF98
-; 1  Graphic mode: YES
-; 0  Unused
-; 0  Composite color phase invert: NO
-; 0  Monochrome on composite video out: NO
-; 0  50Hz video: NO
-; 00 Lines per row: one line per row
- ldb #$80
+; 1   Graphic mode: YES
+; 0   Unused
+; 0   Composite color phase invert: NO
+; 0   Monochrome on composite video out: NO
+; 0   50Hz video: NO
+; 010 LPR: two lines per row
+ ldb #$82
  stb $FF98
 
 ; VIDEO RESOLUTION REGISTER $FF99
 ; 0   Unused
-; 11  LPF: 225
-; 111 HRES: 160 bytes per row
+; 00  LPF: 192
+; 100 HRES: 64 bytes per row
 ; 10  CRES: 16 colors, 2 pixels per byte
- ldb #$7E
+ ldb #$12
  stb $FF99
 
 ; HORIZONTAL OFFSET REGISTER $FF9F
@@ -88,16 +88,47 @@ gfxinit
 
  puls d,pc
 
+* X xpos
+* Y ypos
+* bcc even
+ScreenByte
+ pshs d
+ ldu #SCREEN
+ tfr y,d
+ lda #64
+ mul
+ addr d,u ; u now points to beginning of row
+ tfr x,d
+ lsrd
+ leau d,u ; u now points to screen byte
+ puls d,pc
+
 ; Clear screen
 gfxcls
 * Turn on border (DEBUG)
  ;lda #100
  ;sta $ff9a
- ldu #SCREEN+36000
+ ldu #SCREEN+6144
  ldx #0
  ldy #0
  ldd #0
 loop@
+ pshu d,x,y
+ pshu d,x,y
+ pshu d,x,y
+ pshu d,x,y
+ pshu d,x,y
+ pshu d,x,y
+ pshu d,x,y
+ pshu d,x,y
+ pshu d,x,y
+ pshu d,x,y
+ pshu d,x,y
+ pshu d,x,y
+ pshu d,x,y
+ pshu d,x,y
+ pshu d,x,y
+ pshu d,x,y
  pshu d,x,y
  pshu d,x,y
  pshu d,x,y
@@ -122,16 +153,16 @@ loop@
  rts
 
 ; Set pixel
-; 320 x 225, 16 colors
-; X is x 0-320
-; Y is y 0-224
+; 256 x 192, 16 colors
+; X is x 0-255
+; Y is y 0-191
 ; B is color $00,$11,$22...$FF
  IFDEF M6309
 gfxpset
  pshs d,u
  ldu #SCREEN
  tfr y,d
- lda #160
+ lda #64
  mul
  addr d,u ; u now points to beginning of row
  tfr x,d
@@ -151,15 +182,7 @@ cont@
  ELSE
 gfxpset
  pshs d,u
- ldu #SCREEN
- tfr y,d
- lda #160
- mul
- leau d,u ; u now points to beginning of row
- tfr x,d
- lsra
- rorb
- leau d,u ; u now points to screen byte
+ lbsr ScreenByte
  lda 1,s ; color
  ldb ,u ; screen byte
  bcc even@
@@ -210,4 +233,75 @@ Screen1
  ldd #$CC00
  sta $FF9D	; MSB = $66000 / 2048
  stb $FF9E	; LSB = (addr / 8) AND $ff
+ rts
+
+* X xpos
+* Y ypos
+* A length
+* B color
+VLine
+ pshs a
+ stb color
+ lbsr ScreenByte
+loop@
+* BEGIN ONE PIXEL
+ lda color ; color
+ ldb ,u ; screen byte
+ bcc even@
+ andd #$0FF0
+ bra cont@
+even@
+ andd #$F00F
+cont@
+ orr a,b  
+ stb ,u ; replace screen byte
+* END ONE PIXEL
+ leau 64,u
+ dec ,s
+ bne loop@
+ puls a,pc
+
+* X xpos
+* Y ypos
+* A length
+* B color
+HLine
+ pshs a
+ stb color
+ lbsr ScreenByte
+ bcc even1@
+; line begins on 2nd nibble
+ lda color
+ ldb ,u ; get screen byte
+ andd #$0FF0
+ orr a,b  
+ stb ,u+ ; replace screen byte, point to next byte
+ bra cont1@
+even1@
+; line begins on 1st nibble
+cont1@
+ stu addr1
+ puls b
+ abx
+ lbsr ScreenByte
+ bcs odd2@
+ ; line ends on 1st nibble
+ lda color
+ ldb ,u
+ andd #$F00F
+ orr a,b
+ stb ,u
+ leau -1,u
+ bra cont2@
+odd2@
+; line ends on 2nd nibble
+cont2@
+ stu addr2
+; write full bytes
+ ldb color
+ ldu addr1
+loop@
+ stb ,u+
+ cmpu addr2
+ bls loop@
  rts

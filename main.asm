@@ -1,10 +1,14 @@
  org $0
 
 vsync rmb 1
-seed rmb 2
-tick rmb 1
-xpos rmb 2
-ypos rmb 2
+seed  rmb 2
+tick  rmb 1
+xpos  rmb 1
+color rmb 1
+addr1 rmb 2
+addr2 rmb 2
+byte1 rmb 1
+byte2 rmb 1
 
  org $1000
 
@@ -66,9 +70,7 @@ no@
  * Enable IRQ interrupts
  lbsr EnableIRQ
 
- ldd #0
- std xpos
- std ypos
+ clr xpos
 
 mainloop
 
@@ -81,67 +83,56 @@ mainloop
  * BEGIN SCREEN DRAWING
  lbsr gfxcls
 
- * Line from upper left to lower right
- ldx #46
- ldy #0
- ldb #$22
- lda #224
-loop@
- lbsr gfxpset
- leax 1,x
- leay 1,y
- deca
- bne loop@
-
- * Line from lower left to upper right
- ldx #46
- ldy #224
- ldb #$22
- lda #224
-loop@
- lbsr gfxpset
- leax 1,x
- leay -1,y
- deca
- bne loop@
-
- * Horizontal lines at top and bottom of edges screen
+ * Horizontal lines at top and bottom edges of screen
  ldx #0
+ ldy #0
  ldb #$11
- lda #160
-loop@
- ldy #0
- lbsr gfxpset
- ldy #224
- lbsr gfxpset
- leax 1,x
- ldy #0
- lbsr gfxpset
- ldy #224
- lbsr gfxpset
- leax 1,x
- deca
- bne loop@
+ lda #127/2
+ lbsr HLine
+
+ ldx #0
+ ldy #96/2
+ ldb #$11
+ lda #127/2
+ lbsr HLine
+
+ ldx #127/2
+ ldy #96/2+1
+ ldb #$11
+ lda #127/2
+ lbsr HLine
+
+ ldx #0
+ ldy #95-1 ; Y ranges from 0 to 94?
+ ldb #$11
+ lda #127/2
+ lbsr HLine
 
  * Vertical lines at left and right edges of screen
  ldx #0
  ldy #0
  ldb #$11
- lda #225
-loop@
- ldx #0
- lbsr gfxpset
- ldx #319
- lbsr gfxpset
- leay 1,y
- deca
- bne loop@
+ lda #96/2
+ lbsr VLine
+ ldx #127
+ ldy #0
+ ldb #$11
+ lda #96/2
+ lbsr VLine
 
  * Moving colored dots to show palette colors
- inc xpos+1
- ldx xpos
- leax 27,x
- ldy #13
+ clra
+ ldb xpos
+ tfr d,x
+ cmpd #128-20
+ blo no@
+ ldx #0
+ clr xpos
+no@
+ ;inc xpos
+ ;inc xpos
+ leax 10,x
+ ldy #4
  lda #15
  ldb #$11 ; color
 loop@
@@ -151,17 +142,17 @@ loop@
  leay 1,y
  lbsr gfxpset
  leax -1,x
- lbsr gfxpset
+ ;lbsr gfxpset
  leay -1,y
- leay 14,y
+ leay 6,y
  addb #$11
  deca
  bne loop@
  * END SCREEN DRAWING
 
 * Turn off border (DEBUG)
- ;lda #0
- ;sta $ff9a
+ lda #0
+ sta $ff9a
 
  lbra mainloop
 
