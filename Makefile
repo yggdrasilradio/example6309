@@ -14,3 +14,6 @@ clean:
 
 backup:
 	tar -cvf backups/`date +%Y-%m-%d_%H-%M-%S`.tar Makefile *.asm notes
+
+install:
+	rcp EXAMPLE.BIN ricka@rickadams.org:/home/ricka/rickadams.org/downloads/EXAMPLE.BIN

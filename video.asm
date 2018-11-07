@@ -47,6 +47,12 @@ gfxinit
  ldb #$12
  stb $FF99
 
+; DISTO MEMORY UPGRADE
+ clr $FF9B
+
+; VERTICAL SCROLL REGISTER $FF9C
+ clr $FF9C
+
 ; HORIZONTAL OFFSET REGISTER $FF9F
  clr $FF9F
 
@@ -112,6 +118,7 @@ gfxcls
  ldx #0
  ldy #0
  ldd #0
+ lde #31
 loop@
  pshu d,x,y
  pshu d,x,y
@@ -145,7 +152,7 @@ loop@
  pshu d,x,y
  pshu d,x,y
  pshu d,x,y
- cmpu #SCREEN
+ dece
  bne loop@
 * Turn off border (DEBUG)
  ;lda #0
@@ -159,7 +166,7 @@ loop@
 ; B is color $00,$11,$22...$FF
  IFDEF M6309
 gfxpset
- pshs d,u
+ pshs d,x,y,u
  ldu #SCREEN
  tfr y,d
  lda #64
@@ -178,7 +185,7 @@ even@
 cont@
  orr a,b  
  stb ,u ; replace screen byte
- puls d,u,pc
+ puls d,x,y,u,pc
  ELSE
 gfxpset
  pshs d,u

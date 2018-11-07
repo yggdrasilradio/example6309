@@ -84,41 +84,40 @@ mainloop
  lbsr gfxcls
 
  * Horizontal lines at top and bottom edges of screen
- ldx #0
+ ldx #1
  ldy #0
  ldb #$11
- lda #127/2
+ lda #126
  lbsr HLine
 
- ldx #0
- ldy #96/2
+ ldx #1
+ ldy #95
  ldb #$11
- lda #127/2
- lbsr HLine
-
- ldx #127/2
- ldy #96/2+1
- ldb #$11
- lda #127/2
- lbsr HLine
-
- ldx #0
- ldy #95-1 ; Y ranges from 0 to 94?
- ldb #$11
- lda #127/2
+ lda #126
  lbsr HLine
 
  * Vertical lines at left and right edges of screen
  ldx #0
- ldy #0
+ ldy #1
  ldb #$11
- lda #96/2
+ lda #95
  lbsr VLine
  ldx #127
+ ldy #1
+ ldb #$11
+ lda #95
+ lbsr VLine
+
+; diagonal line
+ ldx #0
  ldy #0
  ldb #$11
- lda #96/2
- lbsr VLine
+loop@
+ lbsr gfxpset
+ leax 1,x
+ leay 1,y
+ cmpx #96
+ bls loop@
 
  * Moving colored dots to show palette colors
  clra
@@ -129,6 +128,7 @@ mainloop
  ldx #0
  clr xpos
 no@
+ inc xpos
  inc xpos
  leax 10,x
  ldy #4
