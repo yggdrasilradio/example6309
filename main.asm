@@ -129,8 +129,7 @@ mainloop
  ldx #0
  clr xpos
 no@
- ;inc xpos
- ;inc xpos
+ inc xpos
  leax 10,x
  ldy #4
  lda #15
@@ -142,7 +141,7 @@ loop@
  leay 1,y
  lbsr gfxpset
  leax -1,x
- ;lbsr gfxpset
+ lbsr gfxpset
  leay -1,y
  leay 6,y
  addb #$11
