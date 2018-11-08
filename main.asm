@@ -4,7 +4,7 @@ vsync rmb 1
 seed  rmb 2
 tick  rmb 1
 xpos  rmb 1
-color rmb 1
+;color rmb 1
 addr1 rmb 2
 addr2 rmb 2
 byte1 rmb 1
@@ -83,41 +83,48 @@ mainloop
  * BEGIN SCREEN DRAWING
  lbsr gfxcls
 
+* Turn on border (DEBUG)
+ ;lda #55
+ ;sta $ff9a
+
  * Horizontal lines at top and bottom edges of screen
  ldx #1
  ldy #0
  ldb #$11
- lda #126
+ lda #125
  lbsr HLine
-
  ldx #1
  ldy #95
  ldb #$11
- lda #126
+ lda #125
  lbsr HLine
 
  * Vertical lines at left and right edges of screen
  ldx #0
  ldy #1
  ldb #$11
- lda #95
+ lda #94
  lbsr VLine
  ldx #127
  ldy #1
  ldb #$11
- lda #95
+ lda #94
  lbsr VLine
 
+* Turn on border (DEBUG)
+ ;lda #5
+ ;sta $ff9a
+
 ; diagonal line
- ldx #0
- ldy #0
- ldb #$11
-loop@
- lbsr gfxpset
- leax 1,x
- leay 1,y
- cmpx #96
- bls loop@
+; ldx #0
+; ldy #0
+; ldb #$11
+;loop@
+; lbsr gfxpset
+; leax 1,x
+; leay 1,y
+; cmpx #96
+; bls loop@
 
  * Moving colored dots to show palette colors
  clra
@@ -129,11 +136,11 @@ loop@
  clr xpos
 no@
  inc xpos
- inc xpos
+ ;inc xpos
  leax 10,x
  ldy #4
  lda #15
- ldb #$11 ; color
+ ldb #$11 ; first color
 loop@
  lbsr gfxpset
  leax 1,x
@@ -144,20 +151,22 @@ loop@
  lbsr gfxpset
  leay -1,y
  leay 6,y
- addb #$11
+ addb #$11 ; next color
  deca
  bne loop@
  * END SCREEN DRAWING
 
 * Turn off border (DEBUG)
- lda #0
- sta $ff9a
+ ;lda #0
+ ;sta $ff9a
 
  lbra mainloop
 
 IRQ
  orcc #%01010000  ; disable IRQ
  inc vsync	  ; set VSYNC flag
+ lbsr romson
+ lbsr romsoff
  tst $FF02	  ; dismiss interrupt
  andcc #%10101111 ; enable IRQ
  rti

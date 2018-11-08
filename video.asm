@@ -28,9 +28,9 @@ cpuinit
 * Init Graphics
 
 gfxinit
- pshs d
+
 ; VIDEO MODE REGISTER $FF98
-; 1   Graphic mode: YES
+; 1   Graphics bitplane mode: YES
 ; 0   Unused
 ; 0   Composite color phase invert: NO
 ; 0   Monochrome on composite video out: NO
@@ -41,13 +41,13 @@ gfxinit
 
 ; VIDEO RESOLUTION REGISTER $FF99
 ; 0   Unused
-; 00  LPF: 192
+; 00  LPF: 192 rows
 ; 100 HRES: 64 bytes per row
 ; 10  CRES: 16 colors, 2 pixels per byte
  ldb #$12
  stb $FF99
 
-; DISTO MEMORY UPGRADE
+; DISTO MEMORY UPGRADE $FF9B
  clr $FF9B
 
 ; VERTICAL SCROLL REGISTER $FF9C
@@ -92,7 +92,7 @@ gfxinit
  lda #0		; BLACK
  sta $ff9A
 
- puls d,pc
+ rts
 
 * X xpos
 * Y ypos
@@ -118,42 +118,59 @@ gfxcls
  ldx #0
  ldy #0
  ldd #0
- lde #31
+ * 27 x 32 x 7 bytes 
+ lde #27
 loop@
- pshu d,x,y
- pshu d,x,y
- pshu d,x,y
- pshu d,x,y
- pshu d,x,y
- pshu d,x,y
- pshu d,x,y
- pshu d,x,y
- pshu d,x,y
- pshu d,x,y
- pshu d,x,y
- pshu d,x,y
- pshu d,x,y
- pshu d,x,y
- pshu d,x,y
- pshu d,x,y
- pshu d,x,y
- pshu d,x,y
- pshu d,x,y
- pshu d,x,y
- pshu d,x,y
- pshu d,x,y
- pshu d,x,y
- pshu d,x,y
- pshu d,x,y
- pshu d,x,y
- pshu d,x,y
- pshu d,x,y
- pshu d,x,y
- pshu d,x,y
- pshu d,x,y
- pshu d,x,y
+ pshu d,x,y,dp
+ pshu d,x,y,dp
+ pshu d,x,y,dp
+ pshu d,x,y,dp
+ pshu d,x,y,dp
+ pshu d,x,y,dp
+ pshu d,x,y,dp
+ pshu d,x,y,dp
+ pshu d,x,y,dp
+ pshu d,x,y,dp
+ pshu d,x,y,dp
+ pshu d,x,y,dp
+ pshu d,x,y,dp
+ pshu d,x,y,dp
+ pshu d,x,y,dp
+ pshu d,x,y,dp
+ pshu d,x,y,dp
+ pshu d,x,y,dp
+ pshu d,x,y,dp
+ pshu d,x,y,dp
+ pshu d,x,y,dp
+ pshu d,x,y,dp
+ pshu d,x,y,dp
+ pshu d,x,y,dp
+ pshu d,x,y,dp
+ pshu d,x,y,dp
+ pshu d,x,y,dp
+ pshu d,x,y,dp
+ pshu d,x,y,dp
+ pshu d,x,y,dp
+ pshu d,x,y,dp
+ pshu d,x,y,dp
  dece
  bne loop@
+ * 13 x 7 bytes
+ pshu d,x,y,dp
+ pshu d,x,y,dp
+ pshu d,x,y,dp
+ pshu d,x,y,dp
+ pshu d,x,y,dp
+ pshu d,x,y,dp
+ pshu d,x,y,dp
+ pshu d,x,y,dp
+ pshu d,x,y,dp
+ pshu d,x,y,dp
+ pshu d,x,y,dp
+ pshu d,x,y,dp
+ pshu d,x,y,dp
+ * 5 bytes
+ pshu d,x,dp
 * Turn off border (DEBUG)
  ;lda #0
  ;sta $ff9a
@@ -247,12 +264,11 @@ Screen1
 * A length
 * B color
 VLine
- pshs a
- stb color
+ tfr d,w ; length in e, color in f
  lbsr ScreenByte
 loop@
 * BEGIN ONE PIXEL
- lda color ; color
+ tfr f,a
  ldb ,u ; screen byte
  bcc even@
  andd #$0FF0
@@ -264,21 +280,20 @@ cont@
  stb ,u ; replace screen byte
 * END ONE PIXEL
  leau 64,u
- dec ,s
+ dece
  bne loop@
- puls a,pc
+ rts
 
 * X xpos
 * Y ypos
 * A length
 * B color
 HLine
- pshs a
- stb color
+ tfr d,w ; length in e, color in f
  lbsr ScreenByte
  bcc even1@
 ; line begins on 2nd nibble
- lda color
+ tfr f,a
  ldb ,u ; get screen byte
  andd #$0FF0
  orr a,b  
@@ -288,12 +303,12 @@ even1@
 ; line begins on 1st nibble
 cont1@
  stu addr1
- puls b
+ tfr e,b
  abx
  lbsr ScreenByte
  bcs odd2@
  ; line ends on 1st nibble
- lda color
+ tfr f,a
  ldb ,u
  andd #$F00F
  orr a,b
@@ -305,7 +320,7 @@ odd2@
 cont2@
  stu addr2
 ; write full bytes
- ldb color
+ tfr f,b
  ldu addr1
 loop@
  stb ,u+

@@ -1,4 +1,6 @@
-why is it so slow?
+redo MMU segments
+
+make 6809 compatible again
 
 interrupt driven sound
 
@@ -8,4 +10,4 @@ interrupt driven joystick polling
 
 scrolling sprites
 
-line routine?
+arbitrary line routine
