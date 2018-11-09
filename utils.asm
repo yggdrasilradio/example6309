@@ -96,13 +96,13 @@ taskmap0
  fdb $3C3D
  fdb $3E3F
 
-;Task 1: $38 $39 $3A $33 $34 $35 $36 $37
+;Task 1: $38 $39 $3A $3B $3C $3D $3E $37
 
 taskmap1
  fdb $3839
- fdb $3A33
- fdb $3435
- fdb $3637
+ fdb $3A3B
+ fdb $3C3D
+ fdb $3E37
 
 * Disable IRQ and FIRQ
 DisableIRQ
@@ -130,4 +130,46 @@ InitIRQ
  lda $ff03
  ora #$01
  sta $ff03
+ rts
+
+KeyIn
+ lbsr romson
+ jsr [$a000]
+ lbsr romsoff
+ rts
+
+SndInit
+ pshs a
+ lda $ff01
+ anda #$f7
+ sta $ff01
+ lda $ff03
+ anda #$f7
+ sta $ff03
+ lbsr SndOn
+ puls a,pc
+
+SndOff
+ pshs a
+ lda $ff23
+ anda #$f7
+ sta $ff23
+ puls a,pc
+
+SndOn
+ pshs a
+ lda $ff23
+ ora #8
+ sta $ff23
+ puls a,pc
+
+JoyIn
+ lbsr SndOff
+ ldb $ff20
+ stb dac
+ jsr [$a00a]
+ ldb dac
+ stb $ff20
+ lbsr SndOn
+ lbsr SndInit
  rts

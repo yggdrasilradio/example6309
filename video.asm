@@ -2,7 +2,6 @@
 * Init CPU
 
 cpuinit
- pshs b
 
 ; INITIALIZATION REGISTER 0 $FF90
 ; 0    Coco 1/2 compatible: NO
@@ -23,7 +22,7 @@ cpuinit
 ; 0    MMU task select 0=enable FFA0-FFA7, 1=enable FFA8-FFAF
  ldb #$60
  sta $ff91
- puls b,pc
+ rts
 
 * Init Graphics
 
@@ -96,6 +95,7 @@ gfxinit
 
 * X xpos
 * Y ypos
+* U pointer to screen byte
 * bcc even
 ScreenByte
  pshs d
@@ -111,69 +111,65 @@ ScreenByte
 
 ; Clear screen
 gfxcls
-* Turn on border (DEBUG)
- ;lda #100
- ;sta $ff9a
- ldu #SCREEN+6144
- ldx #0
- ldy #0
- ldd #0
- * 27 x 32 x 7 bytes 
- lde #27
+ tfr s,v ; here, hold my beer
+ lds #SCREEN+6144
+ tfr 0,d
+ tfr 0,u
+ tfr 0,x
+ tfr 0,y
+
+; pshs d,x,y,u,dp ; 9 bytes
+ * 21 x 32 x 9 bytes 
+ lde #21
 loop@
- pshu d,x,y,dp
- pshu d,x,y,dp
- pshu d,x,y,dp
- pshu d,x,y,dp
- pshu d,x,y,dp
- pshu d,x,y,dp
- pshu d,x,y,dp
- pshu d,x,y,dp
- pshu d,x,y,dp
- pshu d,x,y,dp
- pshu d,x,y,dp
- pshu d,x,y,dp
- pshu d,x,y,dp
- pshu d,x,y,dp
- pshu d,x,y,dp
- pshu d,x,y,dp
- pshu d,x,y,dp
- pshu d,x,y,dp
- pshu d,x,y,dp
- pshu d,x,y,dp
- pshu d,x,y,dp
- pshu d,x,y,dp
- pshu d,x,y,dp
- pshu d,x,y,dp
- pshu d,x,y,dp
- pshu d,x,y,dp
- pshu d,x,y,dp
- pshu d,x,y,dp
- pshu d,x,y,dp
- pshu d,x,y,dp
- pshu d,x,y,dp
- pshu d,x,y,dp
+ pshs d,x,y,u,dp
+ pshs d,x,y,u,dp
+ pshs d,x,y,u,dp
+ pshs d,x,y,u,dp
+ pshs d,x,y,u,dp
+ pshs d,x,y,u,dp
+ pshs d,x,y,u,dp
+ pshs d,x,y,u,dp
+ pshs d,x,y,u,dp
+ pshs d,x,y,u,dp
+ pshs d,x,y,u,dp
+ pshs d,x,y,u,dp
+ pshs d,x,y,u,dp
+ pshs d,x,y,u,dp
+ pshs d,x,y,u,dp
+ pshs d,x,y,u,dp
+ pshs d,x,y,u,dp
+ pshs d,x,y,u,dp
+ pshs d,x,y,u,dp
+ pshs d,x,y,u,dp
+ pshs d,x,y,u,dp
+ pshs d,x,y,u,dp
+ pshs d,x,y,u,dp
+ pshs d,x,y,u,dp
+ pshs d,x,y,u,dp
+ pshs d,x,y,u,dp
+ pshs d,x,y,u,dp
+ pshs d,x,y,u,dp
+ pshs d,x,y,u,dp
+ pshs d,x,y,u,dp
+ pshs d,x,y,u,dp
+ pshs d,x,y,u,dp
  dece
  bne loop@
- * 13 x 7 bytes
- pshu d,x,y,dp
- pshu d,x,y,dp
- pshu d,x,y,dp
- pshu d,x,y,dp
- pshu d,x,y,dp
- pshu d,x,y,dp
- pshu d,x,y,dp
- pshu d,x,y,dp
- pshu d,x,y,dp
- pshu d,x,y,dp
- pshu d,x,y,dp
- pshu d,x,y,dp
- pshu d,x,y,dp
- * 5 bytes
- pshu d,x,dp
-* Turn off border (DEBUG)
- ;lda #0
- ;sta $ff9a
+ * 10 x 9 bytes
+ pshs d,x,y,u,dp
+ pshs d,x,y,u,dp
+ pshs d,x,y,u,dp
+ pshs d,x,y,u,dp
+ pshs d,x,y,u,dp
+ pshs d,x,y,u,dp
+ pshs d,x,y,u,dp
+ pshs d,x,y,u,dp
+ pshs d,x,y,u,dp
+ pshs d,x,y,u,dp
+ * 6 bytes
+ pshs d,x,y
+ tfr v,s
  rts
 
 ; Set pixel
@@ -248,14 +244,14 @@ Task1
  rts
 
 Screen0
- ldd #$EC00
- sta $FF9D	; MSB = $76000 / 2048
+ ldd #$FC00
+ sta $FF9D	; MSB = $7E000 / 2048
  stb $FF9E	; LSB = (addr / 8) AND $ff
  rts
 
 Screen1
- ldd #$CC00
- sta $FF9D	; MSB = $66000 / 2048
+ ldd #$DC00
+ sta $FF9D	; MSB = $6E000 / 2048
  stb $FF9E	; LSB = (addr / 8) AND $ff
  rts
 

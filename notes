@@ -1,13 +1,9 @@
-redo MMU segments
 
 make 6809 compatible again
 
+arbitrary line routine
+
 interrupt driven sound
-
-interrupt driven keyboard polling
-
-interrupt driven joystick polling
 
 scrolling sprites
 
-arbitrary line routine

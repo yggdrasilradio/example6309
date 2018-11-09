@@ -1,14 +1,18 @@
  org $0
 
+
 vsync rmb 1
 seed  rmb 2
 tick  rmb 1
 xpos  rmb 1
-;color rmb 1
 addr1 rmb 2
 addr2 rmb 2
-byte1 rmb 1
-byte2 rmb 1
+dac   rmb 1
+
+rjoyx equ $15a right joystick x
+rjoyy equ $15b right joystick y
+ljoyx equ $15c left joystick x
+ljoyy equ $15d left joystick y
 
  org $1000
 
@@ -75,6 +79,12 @@ no@
 mainloop
 
  lbsr FlipScreens
+
+* Get keyboard input
+ lbsr KeyIn
+
+* Get joystick input
+ lbsr JoyIn
 
 * Turn on border (DEBUG)
  ;lda #100
@@ -164,16 +174,14 @@ loop@
 
 IRQ
  orcc #%01010000  ; disable IRQ
- inc vsync	  ; set VSYNC flag
- lbsr romson
- lbsr romsoff
  tst $FF02	  ; dismiss interrupt
+ inc vsync	  ; set VSYNC flag
  andcc #%10101111 ; enable IRQ
  rti
 
  incl video.asm
  incl utils.asm
 
-SCREEN EQU $6000
+SCREEN EQU $E000
 
  end start
