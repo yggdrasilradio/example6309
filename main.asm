@@ -1,10 +1,11 @@
  org $0
 
-
 vsync rmb 1
 seed  rmb 2
 tick  rmb 1
 xpos  rmb 1
+ypos  rmb 1
+xpos2 rmb 1
 addr1 rmb 2
 addr2 rmb 2
 dac   rmb 1
@@ -75,13 +76,15 @@ no@
  lbsr EnableIRQ
 
  clr xpos
+ clr xpos2
+ clr ypos
 
 mainloop
 
  lbsr FlipScreens
 
 * Get keyboard input
- lbsr KeyIn
+; lbsr KeyIn
 
 * Get joystick input
  lbsr JoyIn
@@ -101,12 +104,12 @@ mainloop
  ldx #1
  ldy #0
  ldb #$11
- lda #125
+ lda #126
  lbsr HLine
  ldx #1
  ldy #95
  ldb #$11
- lda #125
+ lda #126
  lbsr HLine
 
  * Vertical lines at left and right edges of screen
@@ -121,20 +124,38 @@ mainloop
  lda #94
  lbsr VLine
 
+ * Animated horizontal and vertical lines
+ ldx #0
+ ldy #0
+ dec xpos2
+ ldb xpos2
+ cmpb #128
+ blo no@
+ ldb #127
+ stb xpos2 
+no@
+ leax b,x
+ ldb #$22
+ lda #96
+ lbsr VLine
+
+ ldx #0
+ ldy #0
+ inc ypos
+ ldb ypos
+ cmpb #96
+ blt no@
+ clrb
+ clr ypos
+no@
+ leay b,y
+ ldb #$22
+ lda #128
+ lbsr HLine
+
 * Turn on border (DEBUG)
  ;lda #5
  ;sta $ff9a
-
-; diagonal line
-; ldx #0
-; ldy #0
-; ldb #$11
-;loop@
-; lbsr gfxpset
-; leax 1,x
-; leay 1,y
-; cmpx #96
-; bls loop@
 
  * Moving colored dots to show palette colors
  clra
@@ -146,9 +167,8 @@ mainloop
  clr xpos
 no@
  inc xpos
- ;inc xpos
  leax 10,x
- ldy #4
+ ldy #5
  lda #15
  ldb #$11 ; first color
 loop@
@@ -174,8 +194,8 @@ loop@
 
 IRQ
  orcc #%01010000  ; disable IRQ
- tst $FF02	  ; dismiss interrupt
  inc vsync	  ; set VSYNC flag
+ tst $FF02	  ; dismiss interrupt
  andcc #%10101111 ; enable IRQ
  rti
 

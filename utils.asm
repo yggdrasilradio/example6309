@@ -134,7 +134,9 @@ InitIRQ
 
 KeyIn
  lbsr romson
+ lbsr slow
  jsr [$a000]
+ lbsr fast
  lbsr romsoff
  rts
 
@@ -167,7 +169,9 @@ JoyIn
  lbsr SndOff
  ldb $ff20
  stb dac
+ lbsr slow
  jsr [$a00a]
+ lbsr fast
  ldb dac
  stb $ff20
  lbsr SndOn

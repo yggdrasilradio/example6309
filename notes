@@ -1,9 +1,8 @@
+optimize VLine, HLine and ScreenByte
 
 make 6809 compatible again
 
 arbitrary line routine
 
 interrupt driven sound
-
-scrolling sprites
 

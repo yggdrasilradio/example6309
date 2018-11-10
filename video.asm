@@ -277,7 +277,7 @@ cont@
 * END ONE PIXEL
  leau 64,u
  dece
- bne loop@
+ bgt loop@
  rts
 
 * X xpos
@@ -300,6 +300,7 @@ even1@
 cont1@
  stu addr1
  tfr e,b
+ decb
  abx
  lbsr ScreenByte
  bcs odd2@
