@@ -9,6 +9,12 @@ xpos2 rmb 1
 addr1 rmb 2
 addr2 rmb 2
 dac   rmb 1
+ IFDEF M6809
+sreg rmb 2
+wreg rmb 0
+ereg rmb 1
+freg rmb 1
+ ENDC
 
 rjoyx equ $15a right joystick x
 rjoyy equ $15b right joystick y
@@ -193,10 +199,11 @@ loop@
  lbra mainloop
 
 IRQ
- orcc #%01010000  ; disable IRQ
+ ;orcc #%01010000  ; disable IRQ
+ ;lbsr JoyIn
  inc vsync	  ; set VSYNC flag
- tst $FF02	  ; dismiss interrupt
- andcc #%10101111 ; enable IRQ
+ lda $FF02	  ; dismiss interrupt
+ ;andcc #%10101111 ; enable IRQ
  rti
 
  incl video.asm

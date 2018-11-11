@@ -1,6 +1,6 @@
 optimize VLine, HLine and ScreenByte
 
-make 6809 compatible again
+hook joystick to green lines
 
 arbitrary line routine
 

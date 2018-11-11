@@ -103,24 +103,44 @@ ScreenByte
  tfr y,d
  lda #64
  mul
+ IFDEF M6309
  addr d,u ; u now points to beginning of row
  tfr x,d
  lsrd
+ ELSE
+ leau d,u
+ tfr x,d
+ lsra
+ rorb
+ ENDC
  leau d,u ; u now points to screen byte
  puls d,pc
 
 ; Clear screen
 gfxcls
- tfr s,v ; here, hold my beer
- lds #SCREEN+6144
- tfr 0,d
+
+ IFDEF M6309
+ tfr s,v
  tfr 0,u
  tfr 0,x
  tfr 0,y
+ ELSE
+ sts sreg
+ ldu #0
+ ldx #0
+ ldy #0
+ ENDC
 
-; pshs d,x,y,u,dp ; 9 bytes
  * 21 x 32 x 9 bytes 
+ IFDEF M6309
+ tfr 0,d
  lde #21
+ ELSE
+ lda #21
+ sta ereg
+ ldd #0
+ ENDC
+ lds #SCREEN+6144
 loop@
  pshs d,x,y,u,dp
  pshs d,x,y,u,dp
@@ -154,7 +174,11 @@ loop@
  pshs d,x,y,u,dp
  pshs d,x,y,u,dp
  pshs d,x,y,u,dp
+ IFDEF M6309
  dece
+ ELSE
+ dec ereg
+ ENDC
  bne loop@
  * 10 x 9 bytes
  pshs d,x,y,u,dp
@@ -169,7 +193,11 @@ loop@
  pshs d,x,y,u,dp
  * 6 bytes
  pshs d,x,y
+ IFDEF M6309
  tfr v,s
+ ELSE
+ lds sreg
+ ENDC
  rts
 
 ; Set pixel
@@ -191,10 +219,20 @@ gfxpset
  lda 1,s ; color
  ldb ,u ; screen byte
  bcc even@
+ IFDEF M6309
  andd #$0FF0
+ ELSE
+ anda #$0F
+ andb #$F0
+ ENDC
  bra cont@
 even@
+ IFDEF M6309
  andd #$F00F
+ ELSE
+ anda #$F0
+ andb #$0F
+ ENDC
 cont@
  orr a,b  
  stb ,u ; replace screen byte
@@ -260,23 +298,50 @@ Screen1
 * A length
 * B color
 VLine
+ IFDEF M6309
  tfr d,w ; length in e, color in f
+ ELSE
+ std wreg
+ ENDC
  lbsr ScreenByte
 loop@
 * BEGIN ONE PIXEL
+ IFDEF M6309
  tfr f,a
+ ELSE
+ lda freg
+ ENDC
  ldb ,u ; screen byte
  bcc even@
+ IFDEF M6309
  andd #$0FF0
+ ELSE
+ anda #$0F
+ andb #$F0
+ ENDC
  bra cont@
 even@
+ IFDEF M6309
  andd #$F00F
+ ELSE
+ anda #$F0
+ andb #$0F
+ ENDC
 cont@
+ IFDEF M6309
  orr a,b  
+ ELSE
+ pshs a
+ orb ,s+
+ ENDC
  stb ,u ; replace screen byte
 * END ONE PIXEL
  leau 64,u
+ IFDEF M6309
  dece
+ ELSE
+ dec ereg
+ ENDC
  bgt loop@
  rts
 
@@ -285,30 +350,60 @@ cont@
 * A length
 * B color
 HLine
+ IFDEF M6309
  tfr d,w ; length in e, color in f
+ ELSE
+ std wreg
+ ENDC
  lbsr ScreenByte
  bcc even1@
 ; line begins on 2nd nibble
+ IFDEF M6309
  tfr f,a
+ ELSE
+ lda freg
+ ENDC
  ldb ,u ; get screen byte
+ IFDEF M6309
  andd #$0FF0
  orr a,b  
+ ELSE
+ anda #$0F
+ andb #$F0
+ pshs a
+ orb ,s+
+ ENDC
  stb ,u+ ; replace screen byte, point to next byte
  bra cont1@
 even1@
 ; line begins on 1st nibble
 cont1@
  stu addr1
+ IFDEF M6309
  tfr e,b
+ ELSE
+ ldb ereg
+ ENDC
  decb
  abx
  lbsr ScreenByte
  bcs odd2@
  ; line ends on 1st nibble
+ IFDEF M6309
  tfr f,a
+ ELSE
+ lda freg
+ ENDC
  ldb ,u
+ IFDEF M6309
  andd #$F00F
  orr a,b
+ ELSE
+ anda #$F0
+ andb #$0F
+ pshs a
+ orb ,s+
+ ENDC
  stb ,u
  leau -1,u
  bra cont2@
@@ -317,7 +412,11 @@ odd2@
 cont2@
  stu addr2
 ; write full bytes
+ IFDEF M6309
  tfr f,b
+ ELSE
+ ldb freg
+ ENDC
  ldu addr1
 loop@
  stb ,u+
