@@ -19,7 +19,7 @@ cpuinit
 ; 1    Memory type 1=256K, 0=64K chips
 ; 1    TINS Timer clock source 1=279.365 nsec, 0=63.695 usec
 ; 0000 Unused
-; 0    MMU task select 0=enable FFA0-FFA7, 1=enable FFA8-FFAF
+; 0    MMU task select: TASK0
  ldb #$60
  sta $ff91
  rts
@@ -201,9 +201,9 @@ loop@
  rts
 
 ; Set pixel
-; 256 x 192, 16 colors
-; X is x 0-255
-; Y is y 0-191
+; 128 x 96, 16 colors
+; X is x 0-127
+; Y is y 0-95
 ; B is color $00,$11,$22...$FF
  IFDEF M6309
 gfxpset
@@ -259,9 +259,10 @@ cont@
 
 FlipScreens
  sync
- inc tick
- lda tick
- anda #1
+ ;tst vsync
+ ;beq FlipScreens
+ ;clr vsync
+ com tick
  bne task0@
  lbsr Screen1
  lbsr Task0

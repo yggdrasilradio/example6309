@@ -4,22 +4,20 @@ vsync rmb 1
 seed  rmb 2
 tick  rmb 1
 xpos  rmb 1
-ypos  rmb 1
-xpos2 rmb 1
+yline rmb 1
+xline rmb 1
 addr1 rmb 2
 addr2 rmb 2
 dac   rmb 1
+joyx  rmb 1
+joyy  rmb 1
+joyb  rmb 1
  IFDEF M6809
 sreg rmb 2
 wreg rmb 0
 ereg rmb 1
 freg rmb 1
  ENDC
-
-rjoyx equ $15a right joystick x
-rjoyy equ $15b right joystick y
-ljoyx equ $15c left joystick x
-ljoyy equ $15d left joystick y
 
  org $1000
 
@@ -82,15 +80,12 @@ no@
  lbsr EnableIRQ
 
  clr xpos
- clr xpos2
- clr ypos
+ clr xline
+ clr yline
 
 mainloop
 
  lbsr FlipScreens
-
-* Get keyboard input
-; lbsr KeyIn
 
 * Get joystick input
  lbsr JoyIn
@@ -130,34 +125,48 @@ mainloop
  lda #94
  lbsr VLine
 
- * Animated horizontal and vertical lines
+ * Vertical line following joystick
+ lda joyx
+ cmpa #32
+ bgt xinc@
+ dec xline
+ bra cont@
+xinc@
+ inc xline
+cont@
+no@
  ldx #0
  ldy #0
- dec xpos2
- ldb xpos2
- cmpb #128
- blo no@
- ldb #127
- stb xpos2 
-no@
- leax b,x
+ ldb xline
+ andb #$7F
+ abx
  ldb #$22
  lda #96
  lbsr VLine
 
- ldx #0
- ldy #0
- inc ypos
- ldb ypos
- cmpb #96
- blt no@
- clrb
- clr ypos
-no@
- leay b,y
- ldb #$22
- lda #128
- lbsr HLine
+; ldx #0
+; ldy #0
+; lda ljoyy
+; cmpa #32
+; bls yinc@
+; inc ypos
+; bra cont@
+;yinc@
+; dec ypos
+; blt cont@
+; lda #95
+; sta ypos
+;cont@
+; ldb ypos
+; cmpb #96
+; bne no@
+; clrb
+; clr ypos
+;no@
+; leay b,y
+; ldb #$22
+; lda #128
+; lbsr HLine
 
 * Turn on border (DEBUG)
  ;lda #5
@@ -199,15 +208,14 @@ loop@
  lbra mainloop
 
 IRQ
- ;orcc #%01010000  ; disable IRQ
- ;lbsr JoyIn
+ clr vsync
  inc vsync	  ; set VSYNC flag
  lda $FF02	  ; dismiss interrupt
- ;andcc #%10101111 ; enable IRQ
  rti
 
  incl video.asm
  incl utils.asm
+ incl joystick.asm
 
 SCREEN EQU $E000
 

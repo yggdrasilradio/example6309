@@ -169,11 +169,7 @@ JoyIn
  lbsr SndOff
  ldb $ff20
  stb dac
- ;lbsr slow
- lbsr romson
- jsr [$a00a]
- lbsr romsoff
- ;lbsr fast
+ lbsr ReadJoystick
  ldb dac
  stb $ff20
  lbsr SndOn
