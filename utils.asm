@@ -168,10 +168,9 @@ SndOn
 JoyIn
  lbsr SndOff
  ldb $ff20
- stb dac
+ pshs b
  lbsr ReadJoystick
- ldb dac
+ puls b
  stb $ff20
- lbsr SndOn
  lbsr SndInit
  rts

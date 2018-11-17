@@ -8,7 +8,6 @@ yline rmb 1
 xline rmb 1
 addr1 rmb 2
 addr2 rmb 2
-dac   rmb 1
 joyx  rmb 1
 joyy  rmb 1
 joyb  rmb 1
@@ -88,18 +87,18 @@ mainloop
  lbsr FlipScreens
 
 * Get joystick input
- lbsr JoyIn
+ ;lbsr JoyIn
 
 * Turn on border (DEBUG)
- ;lda #100
- ;sta $ff9a
+; lda #100
+; sta $ff9a
 
  * BEGIN SCREEN DRAWING
  lbsr gfxcls
 
 * Turn on border (DEBUG)
- ;lda #55
- ;sta $ff9a
+; lda #55
+; sta $ff9a
 
  * Horizontal lines at top and bottom edges of screen
  ldx #1
@@ -157,8 +156,8 @@ no2@
  lbsr HLine
 
 * Turn on border (DEBUG)
- ;lda #5
- ;sta $ff9a
+; lda #5
+; sta $ff9a
 
  * Moving colored dots to show palette colors
  clra
@@ -190,13 +189,20 @@ loop@
  * END SCREEN DRAWING
 
 * Turn off border (DEBUG)
- ;lda #0
- ;sta $ff9a
+; lda #0
+; sta $ff9a
 
  lbra mainloop
 
 IRQ
  clr vsync
+* Turn on border (DEBUG)
+; lda #100
+; sta $ff9a
+ lbsr JoyIn
+* Turn off border (DEBUG)
+; lda #0
+; sta $ff9a
  inc vsync	  ; set VSYNC flag
  lda $FF02	  ; dismiss interrupt
  rti

@@ -10,8 +10,8 @@ ReadJoystick
  sta $FF01
  lda #($7E+JOYDEADZONE*2)
  sta $FF20
- leas ,s++	; 7 / 6 cycle NOP to let comparator settle
- leas ,s++	; 7 / 6 cycle NOP to let comparator settle
+ leas ,s++	; let comparator settle
+ leas ,s++
  tst $FF00	; check comparator result
  bpl XNotHigh@
  lda #1		; RIGHT
@@ -20,8 +20,8 @@ ReadJoystick
 XNotHigh@
  lda #($7E-JOYDEADZONE*2)
  sta $FF20
- leas ,s++	; 7 / 6 cycle NOP to let comparator settle
- leas ,s++	; 7 / 6 cycle NOP to let comparator settle
+ leas ,s++	; let comparator settle
+ leas ,s++
  tst $FF00	; check comparator result
  bpl XLow@
  lda #0		; NEUTRAL
@@ -37,8 +37,8 @@ EndJoyX@
  sta $FF01
  lda #($7E+JOYDEADZONE*2)
  sta $FF20
- leas ,s++	; 7 / 6 cycle NOP to let comparator settle
- leas ,s++	; 7 / 6 cycle NOP to let comparator settle
+ leas ,s++	; let comparator settle
+ leas ,s++
  tst $FF00	; check comparator result
  bpl YNotHigh@
  lda #1		; DOWN
@@ -47,8 +47,8 @@ EndJoyX@
 YNotHigh@
  lda #($7E-JOYDEADZONE*2)
  sta $FF20
- leas ,s++	; 7 / 6 cycle NOP to let comparator settle
- leas ,s++	; 7 / 6 cycle NOP to let comparator settle
+ leas ,s++	; let comparator settle
+ leas ,s++
  tst $FF00	; check comparator result
  bpl YLow@
  clr joyy	; NEUTRAL
@@ -59,7 +59,7 @@ YLow@
 EndJoyY@
  * read joystick button state
  lda #$FF
- sta $FF02 * set all keyboard column outputs to 1, to ignore keypresses
+ sta $FF02	; set all keyboard column outputs to 1, to ignore keypresses
  lda $FF00
  sta joyb
  rts
