@@ -60,6 +60,10 @@ EndJoyY@
  * read joystick button state
  lda #$FF
  sta $FF02	; set all keyboard column outputs to 1, to ignore keypresses
+ clr joyb
  lda $FF00
- sta joyb
+ anda #$01
+ bne nobutton@	; $FF if not pressed
+ inc joyb
+nobutton@
  rts

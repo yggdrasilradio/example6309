@@ -1,6 +1,3 @@
-optimize VLine, HLine and ScreenByte
-
-hook joystick to green lines
 
 arbitrary line routine
 

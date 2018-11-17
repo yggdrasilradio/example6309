@@ -8,6 +8,16 @@ enable6309
 ; 1    Execution mode: 6309 native mode
  ldmd #$03
  rts
+
+disable6309
+; MODE/ERROR REGISTER
+; 0    Zero division error flag
+; 0    Illegal instruction error flag
+; 0000 Unused
+; 1    FIRQ mode: same as IRQ
+; 0    Execution mode: 6309 native mode
+ ldmd #$02
+ rts
  ENDC
 
 * Set CPU to 1.79 Mhz
@@ -33,13 +43,16 @@ romsoff
 * Hard boot to RSDOS
 reset
  orcc #$50       ; turn off interrupts
+ IFDEF M6309
+ lbsr disable6309
+ ENDC
  ldd  #$8c00
  tfr b,dp        ; reset direct page
  std $ff90       ; turn off MMU and task 0
  stb $ffd8       ; slow CPU
  stb $ffd6
  stb $ffde       ; turn on ROMs
- stb $0071
+ stb >$0071
  jmp [$fffe]
 
 rand
@@ -132,14 +145,6 @@ InitIRQ
  sta $ff03
  rts
 
-KeyIn
- lbsr romson
- lbsr slow
- jsr [$a000]
- lbsr fast
- lbsr romsoff
- rts
-
 SndOff
  lda $ff23 ; 6 bit sound disable
  anda #$f7
@@ -166,4 +171,21 @@ JoyIn
  puls b
  stb $ff20
  lbsr SndOn
+ rts
+
+KEYCLEAR equ $FD
+KEYENTER equ $FE
+KEYBREAK equ $FB
+
+* Check for keypress
+* B: $FD CLEAR
+*    $FE ENTER
+*    $FB BREAK
+* bne no@
+KeyIn
+ ldb #$FB	; BREAK
+ stb $ff02 	; save column strobe
+ ldb $ff00 	; read keyboard data
+ andb #$7f	; mask off comparator
+ cmpb #$3f	; do we have a key press in row 6?
  rts

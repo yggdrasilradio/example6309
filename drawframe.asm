@@ -81,14 +81,10 @@ no@
  lda #15
  ldb #$11 ; first color
 loop@
- lbsr gfxpset
- leax 1,x
- lbsr gfxpset
- leay 1,y
- lbsr gfxpset
- leax -1,x
- lbsr gfxpset
- leay -1,y
+ tst joyb
+ bne nodot@
+ lbsr DrawDot
+nodot@
  leay 6,y
  addb #$11 ; next color
  deca

@@ -208,16 +208,9 @@ loop@
  IFDEF M6309
 gfxpset
  pshs d,x,y,u
- ldu #SCREEN
- tfr y,d
- lda #64
- mul
- addr d,u ; u now points to beginning of row
- tfr x,d
- lsrd
- leau d,u ; u now points to screen byte
+ lbsr ScreenByte
  lda 1,s ; color
- ldb ,u ; screen byte
+ ldb ,u ; get screen byte
  bcc even@
  IFDEF M6309
  andd #$0FF0
@@ -259,9 +252,6 @@ cont@
 
 FlipScreens
  sync
- ;tst vsync
- ;beq FlipScreens
- ;clr vsync
  com tick
  bne task0@
  lbsr Screen1
@@ -423,4 +413,19 @@ loop@
  stb ,u+
  cmpu addr2
  bls loop@
+ rts
+
+; Draw dot
+; X is x 0-127
+; Y is y 0-95
+; B is color $00,$11,$22...$FF
+DrawDot
+ lbsr gfxpset
+ leax 1,x
+ lbsr gfxpset
+ leay 1,y
+ lbsr gfxpset
+ leax -1,x
+ lbsr gfxpset
+ leay -1,y
  rts

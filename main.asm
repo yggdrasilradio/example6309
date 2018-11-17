@@ -89,9 +89,6 @@ mainloop
 
  lbsr FlipScreens
 
-* Get joystick input
- ;lbsr JoyIn
-
 * Turn on border (DEBUG)
 ; lda #100
 ; sta $ff9a
@@ -112,6 +109,11 @@ IRQ
 ; lda #100
 ; sta $ff9a
  lbsr JoyIn
+ ldb #KEYBREAK
+ lbsr KeyIn
+ bne no@
+ lbsr reset
+no@
 * Turn off border (DEBUG)
 ; lda #0
 ; sta $ff9a
