@@ -140,30 +140,23 @@ KeyIn
  lbsr romsoff
  rts
 
-SndInit
- pshs a
+SndOff
+ lda $ff23 ; 6 bit sound disable
+ anda #$f7
+ sta $ff23
+ rts
+
+SndOn
  lda $ff01 ; set mux to 00
  anda #$f7
  sta $ff01
  lda $ff03
  anda #$f7
  sta $ff03
- lbsr SndOn
- puls a,pc
-
-SndOff
- pshs a
- lda $ff23 ; 6 bit sound disable
- anda #$f7
- sta $ff23
- puls a,pc
-
-SndOn
- pshs a
  lda $ff23 ; 6 bit sound enable
  ora #8
  sta $ff23
- puls a,pc
+ rts
 
 JoyIn
  lbsr SndOff
@@ -172,5 +165,5 @@ JoyIn
  lbsr ReadJoystick
  puls b
  stb $ff20
- lbsr SndInit
+ lbsr SndOn
  rts

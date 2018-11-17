@@ -78,9 +78,12 @@ no@
  * Enable IRQ interrupts
  lbsr EnableIRQ
 
+ * Start green lines at center of screen
  clr xpos
- clr xline
- clr yline
+ lda #128/2
+ sta xline
+ lda #96/2
+ sta yline
 
 mainloop
 
