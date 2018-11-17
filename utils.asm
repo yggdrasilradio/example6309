@@ -142,7 +142,7 @@ KeyIn
 
 SndInit
  pshs a
- lda $ff01
+ lda $ff01 ; set mux to 00
  anda #$f7
  sta $ff01
  lda $ff03
@@ -153,14 +153,14 @@ SndInit
 
 SndOff
  pshs a
- lda $ff23
+ lda $ff23 ; 6 bit sound disable
  anda #$f7
  sta $ff23
  puls a,pc
 
 SndOn
  pshs a
- lda $ff23
+ lda $ff23 ; 6 bit sound enable
  ora #8
  sta $ff23
  puls a,pc

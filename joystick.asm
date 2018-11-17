@@ -1,12 +1,17 @@
 JOYDEADZONE EQU 8 ; total deadzone is 8/64 (this number must be even)
 
 ReadJoystick
- * LEFT X 0
- lda $FF01	; set axis 0
+ * LEFT JOYSTICK X AXIS
+ lda $FF03	; set axis 0
+ anda #$F7
+ sta $FF03
+ lda $FF01
  anda #$F7
  sta $FF01
  lda #($7E+JOYDEADZONE*2)
  sta $FF20
+ leas ,s++	; 7 / 6 cycle NOP to let comparator settle
+ leas ,s++	; 7 / 6 cycle NOP to let comparator settle
  tst $FF00	; check comparator result
  bpl XNotHigh@
  lda #1		; RIGHT
@@ -26,7 +31,7 @@ XLow@
  lda #$FF	; LEFT
  sta joyx
 EndJoyX@
- * LEFT Y 1
+ * LEFT JOYSTICK Y AXIS
  lda $FF01	; set axis 1
  ora #8
  sta $FF01
@@ -42,6 +47,8 @@ EndJoyX@
 YNotHigh@
  lda #($7E-JOYDEADZONE*2)
  sta $FF20
+ leas ,s++	; 7 / 6 cycle NOP to let comparator settle
+ leas ,s++	; 7 / 6 cycle NOP to let comparator settle
  tst $FF00	; check comparator result
  bpl YLow@
  clr joyy	; NEUTRAL
