@@ -11,7 +11,9 @@ I'm not in a hurry; I'm relearning things along the way at a slow pace.
 
 Added conditional assembly for 6809 vs. 6309
 
-Added joystick routine inspired by a code example by Richard Goedeken.
+Added joystick routine adapted from a code example by Richard Goedeken.
 
 Now moving the joystick moves green lines around.
+
+Okay, now all the dots bounce around randomly.
 

@@ -63,7 +63,7 @@ EndJoyY@
  clr joyb
  lda $FF00
  anda #$01
- bne nobutton@	; $FF if not pressed
+ bne nobutton@	; $FF if not pressed, $FE if left button
  inc joyb
 nobutton@
  rts

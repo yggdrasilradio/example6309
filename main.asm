@@ -10,6 +10,7 @@ addr1 rmb 2
 addr2 rmb 2
 joyx  rmb 1
 joyy  rmb 1
+lastb rmb 1
 joyb  rmb 1
  IFDEF M6809
 sreg rmb 2
@@ -21,6 +22,13 @@ freg rmb 1
  org $1000
 
 STACK rmb 1
+
+XPOS equ 0
+YPOS equ 1
+XDELTA equ 2
+YDELTA equ 3
+COLOR equ 4
+table rmb 5*16
 
  org $2000
 
@@ -84,6 +92,47 @@ no@
  sta xline
  lda #96/2
  sta yline
+
+ * Init dot table
+ lda #14 ; number of dots
+ pshs a
+ ldu #table
+ leax colors,pcr
+loop@
+ lbsr rand ; random x
+ lda #125
+ mul
+ inca
+ sta XPOS,u
+ lbsr rand ; random y
+ lda #93
+ mul
+ inca
+ sta YPOS,u
+ lbsr rand ; random xdelta, going to be 1 or FF
+ lda #1
+ andb #1
+ beq no@
+ lda #$FF
+no@
+ sta XDELTA,u
+ lbsr rand ; random ydelta, going to be 1 or FF
+ lda #1
+ andb #1
+ beq no@
+ lda #$FF
+ sta YDELTA,u
+ lbsr rand ; random color
+ lda #14
+ mul
+ inca
+ lda a,x
+ sta COLOR,u
+ leau 5,u
+ dec ,s
+ bne loop@
+ clr ,u ; end of table
+ puls a
 
 mainloop
 

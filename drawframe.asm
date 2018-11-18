@@ -67,27 +67,67 @@ no2@
 ; sta $ff9a
 
  * Moving colored dots to show palette colors
- clra
- ldb xpos
- tfr d,x
- cmpd #128-20
- blo no@
- ldx #0
- clr xpos
-no@
- inc xpos
- leax 10,x
- ldy #5
- lda #15
- ldb #$11 ; first color
+; clra
+; ldb xpos
+; tfr d,x
+; cmpd #128-20
+; blo no@
+; ldx #0
+; clr xpos
+;no@
+; inc xpos
+; leax 10,x
+; ldy #5
+; lda #15
+; ldb #$11 ; first color
+;loop@
+; lbsr DrawDot
+; leay 6,y
+; addb #$11 ; next color
+; deca
+; bne loop@
+
+ ldu #table
 loop@
- tst joyb
- bne nodot@
+ * BOUNCE X
+ lda XPOS,u
+ cmpa #1
+ bhi no1@
+ ldb #1
+ stb XDELTA,u
+no1@
+ cmpa #125
+ blo no2@
+ ldb #$FF
+ stb XDELTA,u
+no2@
+ * BOUNCE Y
+ lda YPOS,u
+ cmpa #1
+ bhi no3@
+ ldb #1
+ stb YDELTA,u
+no3@
+ cmpa #93
+ blo no4@
+ ldb #$FF
+ stb YDELTA,u
+no4@
+ lda XPOS,u	; update X
+ adda XDELTA,u
+ sta XPOS,u
+ lda YPOS,u	; update Y
+ adda YDELTA,u
+ sta YPOS,u
+ clra		; draw dot
+ ldb XPOS,u
+ tfr d,x
+ ldb YPOS,u
+ tfr d,y
+ ldb COLOR,u
  lbsr DrawDot
-nodot@
- leay 6,y
- addb #$11 ; next color
- deca
+ leau 5,u
+ tst ,u
  bne loop@
  * END SCREEN DRAWING
 

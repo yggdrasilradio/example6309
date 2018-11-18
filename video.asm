@@ -429,3 +429,21 @@ DrawDot
  lbsr gfxpset
  leay -1,y
  rts
+
+colors
+ fcb $00
+ fcb $11
+ fcb $22
+ fcb $33
+ fcb $44
+ fcb $55
+ fcb $66
+ fcb $77
+ fcb $88
+ fcb $99
+ fcb $AA
+ fcb $BB
+ fcb $CC
+ fcb $DD
+ fcb $EE
+ fcb $FF
