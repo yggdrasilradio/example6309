@@ -66,27 +66,7 @@ no2@
 ; lda #5
 ; sta $ff9a
 
- * Moving colored dots to show palette colors
-; clra
-; ldb xpos
-; tfr d,x
-; cmpd #128-20
-; blo no@
-; ldx #0
-; clr xpos
-;no@
-; inc xpos
-; leax 10,x
-; ldy #5
-; lda #15
-; ldb #$11 ; first color
-;loop@
-; lbsr DrawDot
-; leay 6,y
-; addb #$11 ; next color
-; deca
-; bne loop@
-
+ * Bouncing colored dots
  ldu #table
 loop@
  * BOUNCE X

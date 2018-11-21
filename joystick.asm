@@ -57,13 +57,20 @@ YLow@
  lda #$FF	; UP
  sta joyy
 EndJoyY@
- * read joystick button state
+ * JOYSTICK BUTTON
  lda #$FF
  sta $FF02	; set all keyboard column outputs to 1, to ignore keypresses
- clr joyb
+ clr joyb	; default is not pressed
  lda $FF00
  anda #$01
  bne nobutton@	; $FF if not pressed, $FE if left button
- inc joyb
+ tst joyf	; okay to register button press? nonzero = no
+ bne no@
+ inc joyb	; register button press
+ clr joyf
+ inc joyf	; ignore button until not pressed
+no@
+ rts
 nobutton@
+ clr joyf	; button not pressed, okay to register another button press
  rts

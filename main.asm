@@ -12,6 +12,9 @@ joyx  rmb 1
 joyy  rmb 1
 lastb rmb 1
 joyb  rmb 1
+joyf  rmb 1
+flag  rmb 1
+sptr  rmb 2
  IFDEF M6809
 sreg rmb 2
 wreg rmb 0
@@ -28,7 +31,7 @@ YPOS equ 1
 XDELTA equ 2
 YDELTA equ 3
 COLOR equ 4
-table rmb 5*16
+table rmb 5*15
 
  org $2000
 
@@ -49,6 +52,10 @@ start
  clra
  tfr a,dp
 
+ * Clear sound sample pointer
+ clrb
+ std sptr
+
  * Turn off ROMs
  lbsr romsoff
 
@@ -64,6 +71,9 @@ start
  ldd #123
 no@
  std seed
+
+ * Clear joystick flag
+ clr joyf
 
  * Clear VSYNC flag
  clr vsync
@@ -94,41 +104,38 @@ no@
  sta yline
 
  * Init dot table
- lda #14 ; number of dots
+ lda #15	; number of dots
  pshs a
  ldu #table
  leax colors,pcr
 loop@
- lbsr rand ; random x
+ lbsr rand	; random x
  lda #125
  mul
  inca
  sta XPOS,u
- lbsr rand ; random y
+ lbsr rand	; random y
  lda #93
  mul
  inca
  sta YPOS,u
- lbsr rand ; random xdelta, going to be 1 or FF
+ lbsr rand	; random xdelta, going to be 1 or FF
  lda #1
  andb #1
  beq no@
  lda #$FF
 no@
  sta XDELTA,u
- lbsr rand ; random ydelta, going to be 1 or FF
+ lbsr rand	; random ydelta, going to be 1 or FF
  lda #1
  andb #1
  beq no@
  lda #$FF
  sta YDELTA,u
- lbsr rand ; random color
- lda #14
- mul
- inca
+ lda ,s		; color
  lda a,x
  sta COLOR,u
- leau 5,u
+ leau 5,u ; next table entry
  dec ,s
  bne loop@
  clr ,u ; end of table
@@ -142,6 +149,18 @@ mainloop
 ; lda #100
 ; sta $ff9a
 
+ tst joyb  ; joystick button pressed?
+ beq no@
+ leau laser,pcr
+ stu sptr
+no@
+
+ ldd sptr
+ beq no@
+ lda #100
+no@
+ sta $ff9a
+
  * BEGIN SCREEN DRAWING
  lbsr DrawFrame
  * END SCREEN DRAWING
@@ -151,6 +170,20 @@ mainloop
 ; sta $ff9a
 
  lbra mainloop
+
+FIRQ
+ pshs a,u
+ ldu sptr	; pointer to sound data
+ beq no@	; sample to play?
+ lda ,u+	; get next sample
+ bne notdone@
+ ldu #0		; last sample, clear pointer
+notdone@
+ sta $ff20	; save to DAC
+ stu sptr	; save new pointer value
+no@
+ puls a,u
+ rti
 
 IRQ
  clr vsync
@@ -174,6 +207,33 @@ no@
  incl utils.asm
  incl joystick.asm
  incl drawframe.asm
+
+laser
+ fcb 60
+ fcb 30
+ fcb 60
+ fcb 100
+ fcb 20
+ fcb 70
+ fcb 60
+ fcb 30
+ fcb 60
+ fcb 100
+ fcb 20
+ fcb 70
+ fcb 60
+ fcb 30
+ fcb 60
+ fcb 100
+ fcb 20
+ fcb 70
+ fcb 60
+ fcb 30
+ fcb 60
+ fcb 100
+ fcb 20
+ fcb 70
+ fcb 0
 
 SCREEN EQU $E000
 

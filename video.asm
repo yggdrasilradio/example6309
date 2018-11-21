@@ -17,7 +17,7 @@ cpuinit
 ; INITIALIZATION REGISTER 1 $FF91
 ; 0    Unused
 ; 1    Memory type 1=256K, 0=64K chips
-; 1    TINS Timer clock source 1=279.365 nsec, 0=63.695 usec
+; 1    TINS Timer clock source 1=279.365 ns, 0=63.695 us
 ; 0000 Unused
 ; 0    MMU task select: TASK0
  ldb #$60

@@ -4,9 +4,9 @@ enable6309
 ; 0    Zero division error flag
 ; 0    Illegal instruction error flag
 ; 0000 Unused
-; 1    FIRQ mode: same as IRQ
+; 0    FIRQ mode: normal
 ; 1    Execution mode: 6309 native mode
- ldmd #$03
+ ldmd #$01
  rts
 
 disable6309
@@ -14,9 +14,9 @@ disable6309
 ; 0    Zero division error flag
 ; 0    Illegal instruction error flag
 ; 0000 Unused
-; 1    FIRQ mode: same as IRQ
+; 0    FIRQ mode: normal
 ; 0    Execution mode: 6309 native mode
- ldmd #$02
+ ldmd #$00
  rts
  ENDC
 
@@ -122,17 +122,24 @@ DisableIRQ
  orcc #%01010000
  rts
 
-* Enable IRQ
+* Enable IRQ and FIRQ
 EnableIRQ
  andcc #%10101111
  rts
 
 InitIRQ
+
  * Set IRQ interrupt vector
  lda #$7e
  sta $10c
  leau IRQ,pcr
  stu $10d
+
+ * Set FIRQ interrupt vector
+ lda #$7e
+ sta $10f
+ leau FIRQ,pcr
+ stu $110
 
  * Disable HSYNC
  lda $ff01
@@ -143,6 +150,13 @@ InitIRQ
  lda $ff03
  ora #$01
  sta $ff03
+
+ * Enable TIMER
+ lda #32
+ sta $ff91	; enable 279ns timer
+ sta $ff93	; FIRQ source = timer
+ ldd #459	; timer value (12 bit) 459 = 7798Hz
+ std $ff94
  rts
 
 SndOff
