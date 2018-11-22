@@ -6,12 +6,12 @@ cpuinit
 ; INITIALIZATION REGISTER 0 $FF90
 ; 0    Coco 1/2 compatible: NO
 ; 1    MMU enabled: YES
-; 0    GIME IRQ enabled: NO
-; 0    GIME FIRQ enabled: NO
+; 1    GIME IRQ enabled: NO
+; 1    GIME FIRQ enabled: NO
 ; 1    RAM at FExx is constant: YES
 ; 0    Standard SCS (spare chip select): OFF
 ; 00   ROM map control: 16k internal, 16K external
- ldb #$48
+ ldb #$78
  stb $FF90
 
 ; INITIALIZATION REGISTER 1 $FF91
@@ -22,6 +22,29 @@ cpuinit
 ; 0    MMU task select: TASK0
  ldb #$60
  sta $ff91
+
+; IRQ ENABLE/STATUS REGISTER $FF92
+; 00 Undefined
+; 0  Timer
+; 0 HBORD Horizontal Border
+; 1 VBORD Vertical Border
+; 0 EI2 Serial Data
+; 0 EI1 Keyboard
+; 0 EI0 Cartridge
+ ldb #$08
+ stb $ff92
+
+; FIRQ ENABLE/STATUS REGISTER $FF93
+; 00 Undefined
+; 1  Timer
+; 0 HBORD Horizontal Border
+; 0 VBORD Vertical Border
+; 0 EI2 Serial Data
+; 0 EI1 Keyboard
+; 0 EI0 Cartridge
+ ldb #$20
+ stb $ff93
+
  rts
 
 * Init Graphics

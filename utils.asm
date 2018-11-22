@@ -15,7 +15,7 @@ disable6309
 ; 0    Illegal instruction error flag
 ; 0000 Unused
 ; 0    FIRQ mode: normal
-; 0    Execution mode: 6309 native mode
+; 0    Execution mode: 6809 mode
  ldmd #$00
  rts
  ENDC
@@ -131,32 +131,30 @@ InitIRQ
 
  * Set IRQ interrupt vector
  lda #$7e
- sta $10c
+ sta $fef7
  leau IRQ,pcr
- stu $10d
+ stu $fef8
 
  * Set FIRQ interrupt vector
  lda #$7e
- sta $10f
+ sta $fef4
  leau FIRQ,pcr
- stu $110
+ stu $fef5
 
  * Disable HSYNC
  lda $ff01
  anda #$fe
  sta $ff01
 
- * Enable VSYNC
+ * Disable VSYNC
  lda $ff03
- ora #$01
+ anda #$fe
  sta $ff03
 
  * Enable TIMER
- lda #32
- sta $ff91	; enable 279ns timer
- sta $ff93	; FIRQ source = timer
  ldd #459	; timer value (12 bit) 459 = 7798Hz
  std $ff94
+
  rts
 
 SndOff

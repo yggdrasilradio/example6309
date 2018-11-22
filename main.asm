@@ -135,10 +135,10 @@ no@
  lda ,s		; color
  lda a,x
  sta COLOR,u
- leau 5,u ; next table entry
+ leau 5,u	; next table entry
  dec ,s
  bne loop@
- clr ,u ; end of table
+ clr ,u		; end of table
  puls a
 
 mainloop
@@ -183,6 +183,7 @@ notdone@
  stu sptr	; save new pointer value
 no@
  puls a,u
+ lda $FF93
  rti
 
 IRQ
@@ -200,40 +201,15 @@ no@
 ; lda #0
 ; sta $ff9a
  inc vsync	  ; set VSYNC flag
- lda $FF02	  ; dismiss interrupt
+ ;lda $FF02	  ; dismiss interrupt
+ lda $FF92
  rti
 
  incl video.asm
  incl utils.asm
  incl joystick.asm
  incl drawframe.asm
-
-laser
- fcb 60
- fcb 30
- fcb 60
- fcb 100
- fcb 20
- fcb 70
- fcb 60
- fcb 30
- fcb 60
- fcb 100
- fcb 20
- fcb 70
- fcb 60
- fcb 30
- fcb 60
- fcb 100
- fcb 20
- fcb 70
- fcb 60
- fcb 30
- fcb 60
- fcb 100
- fcb 20
- fcb 70
- fcb 0
+ incl laser.asm
 
 SCREEN EQU $E000
 
