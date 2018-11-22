@@ -1,5 +1,6 @@
  org $0
 
+swap  rmb 1
 vsync rmb 1
 seed  rmb 2
 tick  rmb 1
@@ -75,7 +76,7 @@ no@
  * Clear joystick flag
  clr joyf
 
- * Clear VSYNC flag
+ * Clear VSYNC and DRAW flags
  clr vsync
 
  * Init CPU
@@ -182,8 +183,8 @@ notdone@
  sta $ff20	; save to DAC
  stu sptr	; save new pointer value
 no@
- puls a,u
  lda $FF93
+ puls a,u
  rti
 
 IRQ
@@ -201,8 +202,7 @@ no@
 ; lda #0
 ; sta $ff9a
  inc vsync	  ; set VSYNC flag
- ;lda $FF02	  ; dismiss interrupt
- lda $FF92
+ lda $FF92	  ; dismiss interrupt
  rti
 
  incl video.asm

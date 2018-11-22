@@ -274,7 +274,10 @@ cont@
  ENDC
 
 FlipScreens
- sync
+ ;sync
+ tst vsync
+ beq FlipScreens
+ clr vsync
  com tick
  bne task0@
  lbsr Screen1
