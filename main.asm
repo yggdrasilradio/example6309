@@ -76,8 +76,9 @@ no@
  * Clear joystick flag
  clr joyf
 
- * Clear VSYNC and DRAW flags
+ * Clear VSYNC flag
  clr vsync
+ clr swap
 
  * Init CPU
  lbsr cpuinit
@@ -188,7 +189,6 @@ no@
  rti
 
 IRQ
- clr vsync
 * Turn on border (DEBUG)
 ; lda #100
 ; sta $ff9a
@@ -201,7 +201,12 @@ no@
 * Turn off border (DEBUG)
 ; lda #0
 ; sta $ff9a
- inc vsync	  ; set VSYNC flag
+ tst swap	; waiting for VSYNC?
+ beq noswap@
+ clr swap
+ lda #1
+ sta vsync	  ; set VSYNC flag
+noswap@
  lda $FF92	  ; dismiss interrupt
  rti
 
