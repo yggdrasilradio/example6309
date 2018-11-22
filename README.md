@@ -7,8 +7,6 @@ Eventually I hope this will be the framework for Temple of ROM II.
 
 I'm not in a hurry; I'm relearning things along the way at a slow pace.
 
-DOESN'T WORK AT THE MOMENT
-
 ### Changes
 
 Added conditional assembly for 6809 vs. 6309
@@ -19,5 +17,4 @@ Now moving the joystick moves green lines around.
 
 Okay, now all the dots bounce around randomly.
 
-Tried to set up sound via GIME and it's failing miserably
-
+The joystick button now plays a laser sound.
