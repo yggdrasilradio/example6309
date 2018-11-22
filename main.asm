@@ -1,6 +1,5 @@
  org $0
 
-swap  rmb 1
 vsync rmb 1
 seed  rmb 2
 tick  rmb 1
@@ -75,10 +74,6 @@ no@
 
  * Clear joystick flag
  clr joyf
-
- * Clear VSYNC flag
- clr vsync
- clr swap
 
  * Init CPU
  lbsr cpuinit
@@ -193,20 +188,15 @@ IRQ
 ; lda #100
 ; sta $ff9a
  lbsr JoyIn
- ldb #KEYBREAK
+ ldb #KEYBREAK	; is BREAK pressed?
  lbsr KeyIn
  bne no@
- lbsr reset
+ lbsr reset	; hard boot back to RSDOS
 no@
 * Turn off border (DEBUG)
 ; lda #0
 ; sta $ff9a
- tst swap	; waiting for VSYNC?
- beq noswap@
- clr swap
- lda #1
- sta vsync	  ; set VSYNC flag
-noswap@
+ inc vsync	  ; set VSYNC flag
  lda $FF92	  ; dismiss interrupt
  rti
 

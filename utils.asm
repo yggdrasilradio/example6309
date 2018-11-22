@@ -201,3 +201,10 @@ KeyIn
  andb #$7f	; mask off comparator
  cmpb #$3f	; do we have a key press in row 6?
  rts
+
+WaitForVSync
+ clr vsync
+loop@
+ tst vsync
+ beq loop@
+ rts

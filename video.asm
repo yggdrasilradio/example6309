@@ -274,12 +274,7 @@ cont@
  ENDC
 
 FlipScreens
- inc swap
- ;sync
-loop@
- tst vsync
- beq loop@
- clr vsync
+ lbsr WaitForVSync
  com tick
  bne task0@
  lbsr Screen1
