@@ -12,7 +12,6 @@ joyx  rmb 1
 joyy  rmb 1
 lastb rmb 1
 joyb  rmb 1
-joyf  rmb 1
 flag  rmb 1
 sptr  rmb 2
  IFDEF M6809
@@ -71,9 +70,6 @@ start
  ldd #123
 no@
  std seed
-
- * Clear joystick flag
- clr joyf
 
  * Init CPU
  lbsr cpuinit
@@ -146,17 +142,19 @@ mainloop
 ; lda #100
 ; sta $ff9a
 
- tst joyb  ; joystick button pressed?
+ tst joyb	; joystick button pressed?
  beq no@
- leau laser,pcr
+ tst sptr
+ bne no@
+ leau laser,pcr ; start laser sound
  stu sptr
 no@
 
- ldd sptr
+ ldd sptr  ; is sound being played?
  beq no@
- lda #100
+ lda #100  ; if so, set border to red
 no@
- sta $ff9a
+ sta $ff9a ; otherwise set to black
 
  * BEGIN SCREEN DRAWING
  lbsr DrawFrame
@@ -180,24 +178,18 @@ notdone@
  stu sptr	; save new pointer value
 no@
  lda $FF93
- puls a,u
+ puls a,u	; dismiss interrupt
  rti
 
 IRQ
-* Turn on border (DEBUG)
-; lda #100
-; sta $ff9a
  lbsr JoyIn
  ldb #KEYBREAK	; is BREAK pressed?
  lbsr KeyIn
  bne no@
  lbsr reset	; hard boot back to RSDOS
 no@
-* Turn off border (DEBUG)
-; lda #0
-; sta $ff9a
- inc vsync	  ; set VSYNC flag
- lda $FF92	  ; dismiss interrupt
+ inc vsync	; set VSYNC flag
+ lda $FF92	; dismiss interrupt
  rti
 
  incl video.asm

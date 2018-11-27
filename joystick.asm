@@ -64,13 +64,6 @@ EndJoyY@
  lda $FF00
  anda #$01
  bne nobutton@	; $FF if not pressed, $FE if left button
- tst joyf	; okay to register button press? nonzero = no
- bne no@
  inc joyb	; register button press
- clr joyf
- inc joyf	; ignore button until not pressed
-no@
- rts
 nobutton@
- clr joyf	; button not pressed, okay to register another button press
  rts
