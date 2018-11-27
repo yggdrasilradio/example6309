@@ -65,7 +65,11 @@ start
  lbsr InitMMU
 
  * Seed random number routine
+ IFDEF M6309
+ tfr v,d	    ; save seed in nonvolatile storage
+ ELSE
  ldd $112
+ ENDC
  bne no@ ; can't be zero
  ldd #123
 no@

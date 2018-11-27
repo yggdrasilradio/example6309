@@ -73,6 +73,9 @@ no@
  rol    seed+1      ; shift carry into bit 0
  rol    seed        ; one more shift to complete the 16 bit shift
  ldd    seed        ; load up a and b with the new random seed
+ IFDEF M6309
+ tfr d,v	    ; save seed in nonvolatile storage
+ ENDC
  rts
 
 hang
