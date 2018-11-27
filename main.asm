@@ -144,7 +144,7 @@ mainloop
 
  tst joyb	; joystick button pressed?
  beq no@
- tst sptr
+ tst sptr	; laser sound currently playing?
  bne no@
  leau laser,pcr ; start laser sound
  stu sptr
