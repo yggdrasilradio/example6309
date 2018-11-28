@@ -70,43 +70,43 @@ no2@
  ldu #table
 loop@
  * BOUNCE X
- lda XPOS,u
+ lda DOT.XPOS,u
  cmpa #1
  bhi no1@
  ldb #1
- stb XDELTA,u
+ stb DOT.XDELTA,u
 no1@
  cmpa #125
  blo no2@
  ldb #$FF
- stb XDELTA,u
+ stb DOT.XDELTA,u
 no2@
  * BOUNCE Y
- lda YPOS,u
+ lda DOT.YPOS,u
  cmpa #1
  bhi no3@
  ldb #1
- stb YDELTA,u
+ stb DOT.YDELTA,u
 no3@
  cmpa #93
  blo no4@
  ldb #$FF
- stb YDELTA,u
+ stb DOT.YDELTA,u
 no4@
- lda XPOS,u	; update X
- adda XDELTA,u
- sta XPOS,u
- lda YPOS,u	; update Y
- adda YDELTA,u
- sta YPOS,u
+ lda DOT.XPOS,u	; update X
+ adda DOT.XDELTA,u
+ sta DOT.XPOS,u
+ lda DOT.YPOS,u	; update Y
+ adda DOT.YDELTA,u
+ sta DOT.YPOS,u
  clra		; draw dot
- ldb XPOS,u
+ ldb DOT.XPOS,u
  tfr d,x
- ldb YPOS,u
+ ldb DOT.YPOS,u
  tfr d,y
- ldb COLOR,u
+ ldb DOT.COLOR,u
  lbsr DrawDot
- leau 5,u
+ leau sizeof{DOT},u
  tst ,u
  bne loop@
  * END SCREEN DRAWING

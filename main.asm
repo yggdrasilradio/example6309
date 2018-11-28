@@ -26,12 +26,16 @@ freg rmb 1
 
 STACK rmb 1
 
-XPOS equ 0
-YPOS equ 1
-XDELTA equ 2
-YDELTA equ 3
-COLOR equ 4
-table rmb 5*15
+NDOTS equ 15
+DOT struct
+XPOS rmb 1
+YPOS rmb 1
+XDELTA rmb 1
+YDELTA rmb 1
+COLOR rmb 1
+ endstruct
+
+table rmb sizeof{DOT}*(NDOTS+1)
 
  org $2000
 
@@ -70,10 +74,11 @@ start
 
  * Seed random number routine
  IFDEF M6309
- tfr v,d	    ; save seed in nonvolatile storage
+ tfr v,d ; get seed from nonvolatile storage
  ELSE
  ldd $112
  ENDC
+ cmpd #0
  bne no@ ; can't be zero
  ldd #123
 no@
@@ -105,7 +110,7 @@ no@
  sta yline
 
  * Init dot table
- lda #15	; number of dots
+ lda #NDOTS 	; number of dots
  pshs a
  ldu #table
  leax colors,pcr
@@ -114,29 +119,30 @@ loop@
  lda #125
  mul
  inca
- sta XPOS,u
+ sta DOT.XPOS,u
  lbsr rand	; random y
  lda #93
  mul
  inca
- sta YPOS,u
+ sta DOT.YPOS,u
  lbsr rand	; random xdelta, going to be 1 or FF
  lda #1
  andb #1
  beq no@
  lda #$FF
 no@
- sta XDELTA,u
+ sta DOT.XDELTA,u
  lbsr rand	; random ydelta, going to be 1 or FF
  lda #1
  andb #1
  beq no@
  lda #$FF
- sta YDELTA,u
+ sta DOT.YDELTA,u
  lda ,s		; color
+ anda #$0f
  lda a,x
- sta COLOR,u
- leau 5,u	; next table entry
+ sta DOT.COLOR,u
+ leau sizeof{DOT},u ; next table entry
  dec ,s
  bne loop@
  clr ,u		; end of table
