@@ -19,4 +19,4 @@ Okay, now all the dots bounce around randomly.
 
 The joystick button now plays a laser sound.
 
-Fixed joystick fire button debounce.
+Fixed joystick fire button debounce with advice from Steve Bjork.

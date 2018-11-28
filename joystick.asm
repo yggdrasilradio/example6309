@@ -62,7 +62,7 @@ EndJoyY@
  sta $FF02	; set all keyboard column outputs to 1, to ignore keypresses
  lda $FF00
  anda #$01
- bne nobutton@	; $FF if not pressed, $FE if left button
+ bne nobutton@	; $FF if not pressed, $FE if right button, $FD if left
  tst joyf
  bne no@
  inc joyb	; raise button press
