@@ -2,7 +2,7 @@
 all:	6309
 
 6309: main.asm
-	lwasm -DM6309 -3 -b -o EXAMPLE.BIN main.asm
+	lwasm -DM6309 --list --symbols -3 -b -o EXAMPLE.BIN main.asm > example.lst
 	decb copy -r -2 -b EXAMPLE.BIN /media/share1/COCO/drive0.dsk,EXAMPLE.BIN
 
 6809: main.asm
@@ -10,7 +10,7 @@ all:	6309
 	decb copy -r -2 -b EXAMPLE.BIN /media/share1/COCO/drive0.dsk,EXAMPLE.BIN
 
 clean:
-	rm -f *.bin
+	rm -f *.bin *.lst
 
 backup:
 	tar -cvf backups/`date +%Y-%m-%d_%H-%M-%S`.tar Makefile *.asm notes
