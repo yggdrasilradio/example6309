@@ -1,5 +1,6 @@
  org $0
 
+joyf  rmb 1
 vsync rmb 1
 seed  rmb 2
 tick  rmb 1
@@ -49,11 +50,14 @@ start
 
  * Set direct page
  clra
+ clrb
  tfr a,dp
 
  * Clear sound sample pointer
- clrb
  std sptr
+
+ * Clear joystick fire button flag
+ sta joyf
 
  * Turn off ROMs
  lbsr romsoff
@@ -148,10 +152,9 @@ mainloop
 
  tst joyb	; joystick button pressed?
  beq no@
- tst sptr	; laser sound currently playing?
- bne no@
  leau laser,pcr ; start laser sound
  stu sptr
+ clr joyb
 no@
 
  ldd sptr  ; is sound being played?
@@ -186,14 +189,28 @@ no@
  rti
 
 IRQ
+
+ * Countdown timer for joystick fire button
+ tst joyf
+ beq no@
+ dec joyf
+no@
+
+ * Poll joystick
  lbsr JoyIn
- ldb #KEYBREAK	; is BREAK pressed?
+
+ * Hard boot to RSDOS if BREAK pressed
+ ldb #KEYBREAK
  lbsr KeyIn
  bne no@
- lbsr reset	; hard boot back to RSDOS
+ lbsr reset
 no@
- inc vsync	; set VSYNC flag
- lda $FF92	; dismiss interrupt
+
+ * Set VSYNC flag
+ inc vsync
+
+ * Dismiss interrupt
+ lda $FF92
  rti
 
  incl video.asm

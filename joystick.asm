@@ -60,10 +60,14 @@ EndJoyY@
  * JOYSTICK BUTTON
  lda #$FF
  sta $FF02	; set all keyboard column outputs to 1, to ignore keypresses
- clr joyb	; default is not pressed
  lda $FF00
  anda #$01
  bne nobutton@	; $FF if not pressed, $FE if left button
- inc joyb	; register button press
+ tst joyf
+ bne no@
+ inc joyb	; raise button press
+no@
+ lda #2		; debounce button press
+ sta joyf
 nobutton@
  rts
