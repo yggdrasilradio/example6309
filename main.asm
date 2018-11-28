@@ -75,10 +75,8 @@ start
  * Seed random number routine
  IFDEF M6309
  tfr v,d ; get seed from nonvolatile storage
- ELSE
- ldd $112
  ENDC
- cmpd #0
+ addd $112
  bne no@ ; can't be zero
  ldd #123
 no@
