@@ -2,11 +2,11 @@
 all:	6309
 
 6309: main.asm
-	lwasm -DM6309 --list --symbols -3 -b -o EXAMPLE.BIN main.asm > example.lst
+	lwasm -DM6309 --list -3 -b -o EXAMPLE.BIN main.asm > example.lst
 	decb copy -r -2 -b EXAMPLE.BIN /media/share1/COCO/drive0.dsk,EXAMPLE.BIN
 
 6809: main.asm
-	lwasm -DM6809 --list --symbols -9 -b -o EXAMPLE.BIN main.asm > example.lst
+	lwasm -DM6809 --list -9 -b -o EXAMPLE.BIN main.asm > example.lst
 	decb copy -r -2 -b EXAMPLE.BIN /media/share1/COCO/drive0.dsk,EXAMPLE.BIN
 
 clean:
