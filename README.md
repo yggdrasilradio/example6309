@@ -7,10 +7,6 @@ Eventually I hope this will be the framework for Temple of ROM II.
 
 I'm not in a hurry; I'm relearning things along the way at a slow pace.
 
-### Current Bugs
-
-Sprite routine doesn't work
-
 ### Changes
 
 Added conditional assembly for 6809 vs. 6309
