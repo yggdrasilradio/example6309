@@ -113,7 +113,7 @@ no4@
 
  ldx #30
  ldy #30
- leau sprite1,pcr
+ leau sprite3,pcr
  lbsr DrawSprite
 
  rts

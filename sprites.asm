@@ -13,8 +13,7 @@ no@
 	pshs a
 row@
 * BEGIN ROW *
-	lda ,w		; is sprite data zero
-	lbeq endrow@	; all done then
+	lda ,w		; sprite data
 	tst even	; is it even?
 	lbne even@
 * BEGIN ODD ROW
@@ -108,8 +107,8 @@ odd@
 	lsla
 	lsla
 	orr a,b
-	incw
 	stb 4,u
+	incw
  lbra endrow@
 * END ODD ROW
 * BEGIN EVEN ROW
@@ -128,7 +127,7 @@ even@
 	incw		; next byte of sprite data
 * BYTE 2
 	lda ,w		; sprite data
-	ldb ,u		; screen byte
+	ldb 1,u		; screen byte
 	bita #$F0	; anything in left nibble of sprite data?
 	beq >
 	andb #$0F	; clear out left screen nibble then
@@ -140,7 +139,7 @@ even@
 	incw		; next byte of sprite data
 * BYTE 3
 	lda ,w		; sprite data
-	ldb ,u		; screen byte
+	ldb 2,u		; screen byte
 	bita #$F0	; anything in left nibble of sprite data?
 	beq >
 	andb #$0F	; clear out left screen nibble then
@@ -152,7 +151,7 @@ even@
 	incw		; next byte of sprite data
 * BYTE 4
 	lda ,w		; sprite data
-	ldb ,u		; screen byte
+	ldb 3,u		; screen byte
 	bita #$F0	; anything in left nibble of sprite data?
 	beq >
 	andb #$0F	; clear out left screen nibble then
