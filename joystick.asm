@@ -24,8 +24,7 @@ XNotHigh@
  leas ,s++
  tst $FF00	; check comparator result
  bpl XLow@
- lda #0		; NEUTRAL
- sta joyx
+ clr joyx	; NEUTRAL
  bra EndJoyX@
 XLow@
  lda #$FF	; LEFT
@@ -57,7 +56,7 @@ YLow@
  lda #$FF	; UP
  sta joyy
 EndJoyY@
- * JOYSTICK BUTTON
+ * LEFT JOYSTICK BUTTON
  lda #$FF
  sta $FF02	; set all keyboard column outputs to 1, to ignore keypresses
  lda $FF00

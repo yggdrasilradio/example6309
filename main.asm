@@ -1,5 +1,8 @@
+ setdp 0
+
  org $0
 
+even  rmb 1
 joyf  rmb 1
 vsync rmb 1
 seed  rmb 2
@@ -74,10 +77,10 @@ start
 
  * Seed random number routine
  IFDEF M6309
- tfr v,d ; get seed from nonvolatile storage
+ tfr v,d	; get seed from nonvolatile storage
  ENDC
- addd $112
- bne no@ ; can't be zero
+ addd $112	; throw in the BASIC timer
+ bne no@	; can't be zero
  ldd #123
 no@
  std seed
@@ -185,6 +188,7 @@ FIRQ
  bne notdone@
  ldu #0		; last sample, clear pointer
 notdone@
+ ora #$02	; keep RS232 high
  sta $ff20	; save to DAC
  stu sptr	; save new pointer value
 no@
@@ -222,6 +226,7 @@ no@
  incl joystick.asm
  incl drawframe.asm
  incl laser.asm
+ incl sprites.asm
 
 SCREEN EQU $E000
 

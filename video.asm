@@ -106,8 +106,10 @@ gfxinit
  lda #31 	; 12 CYAN
  sta $FFBC
  lda #38 	; 13 ORANGE
+ sta $FFBD
+ lda #38 	; 14 ORANGE
  sta $FFBE
- lda #63 	; 14 WHITE
+ lda #63 	; 15 WHITE
  sta $FFBF
 
 ; BORDER COLOR REGISTER $FF9A

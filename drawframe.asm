@@ -111,4 +111,9 @@ no4@
  bne loop@
  * END SCREEN DRAWING
 
+ ldx #30
+ ldy #30
+ leau sprite1,pcr
+ lbsr DrawSprite
+
  rts
