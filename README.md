@@ -7,6 +7,10 @@ Eventually I hope this will be the framework for Temple of ROM II.
 
 I'm not in a hurry; I'm relearning things along the way at a slow pace.
 
+### Bugs
+
+Sprite drawing is 6309 only, needs conditional assembly
+
 ### Changes
 
 Added conditional assembly for 6809 vs. 6309
@@ -21,4 +25,7 @@ The joystick button now plays a laser sound.
 
 Fixed joystick fire button debounce with advice from Steve Bjork.
 
-First attempt to draw a sprite
+Now there's an explosion when you hit the fire button.
+
+
+

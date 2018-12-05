@@ -111,9 +111,13 @@ no4@
  bne loop@
  * END SCREEN DRAWING
 
- ldx #30
- ldy #30
- leau sprite3,pcr
+ * Try drawing a sprite
+ ldx #31
+ ldy #31
+ leau spider1,pcr
  lbsr DrawSprite
+
+ * Draw scheduled sprites
+ lbsr DrawSprites
 
  rts

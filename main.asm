@@ -2,12 +2,12 @@
 
  org $0
 
+frame rmb 1
 even  rmb 1
 joyf  rmb 1
 vsync rmb 1
 seed  rmb 2
 tick  rmb 1
-xpos  rmb 1
 yline rmb 1
 xline rmb 1
 addr1 rmb 2
@@ -30,6 +30,7 @@ freg rmb 1
 STACK rmb 1
 
 NDOTS equ 15
+
 DOT struct
 XPOS rmb 1
 YPOS rmb 1
@@ -39,6 +40,16 @@ COLOR rmb 1
  endstruct
 
 table rmb sizeof{DOT}*(NDOTS+1)
+
+NSPRITES equ 8
+
+SPRITE struct
+ADDR rmb 2
+XPOS rmb 1
+YPOS rmb 1
+ endstruct
+
+sprites rmb sizeof{SPRITE}*(NSPRITES+1)
 
  org $2000
 
@@ -91,6 +102,9 @@ no@
  * Init graphics
  lbsr gfxinit
 
+ * Init sprites
+ lbsr InitSprites
+
  * Clear screens
  lbsr Task0
  lbsr gfxcls
@@ -104,7 +118,6 @@ no@
  lbsr EnableIRQ
 
  * Start green lines at center of screen
- clr xpos
  lda #128/2
  sta xline
  lda #96/2
@@ -159,9 +172,20 @@ mainloop
 
  tst joyb	; joystick button pressed?
  beq no@
- leau laser,pcr ; start laser sound
+ * Start laser sound
+ leau laser,pcr
  stu sptr
  clr joyb
+ * Add explosion sprite
+ leau explosion,pcr
+ clra
+ ldb xline
+ subd #4
+ tfr d,x
+ ldb yline
+ subd #4
+ tfr d,y
+ lbsr AddSprite
 no@
 
  ldd sptr  ; is sound being played?
@@ -197,6 +221,8 @@ no@
  rti
 
 IRQ
+
+ inc frame
 
  * Countdown timer for joystick fire button
  tst joyf
