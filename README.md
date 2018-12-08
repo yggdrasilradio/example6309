@@ -27,5 +27,6 @@ Fixed joystick fire button debounce with advice from Steve Bjork.
 
 Now there's an explosion when you hit the fire button.
 
+Added spider and fireball animations.
 
 
