@@ -222,8 +222,6 @@ no@
 
 IRQ
 
- inc frame
-
  * Countdown timer for joystick fire button
  tst joyf
  beq no@

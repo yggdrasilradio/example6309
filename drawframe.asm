@@ -1,5 +1,7 @@
 DrawFrame
 
+ inc frame
+
  * BEGIN SCREEN DRAWING
  lbsr gfxcls
 
@@ -111,10 +113,26 @@ no4@
  bne loop@
  * END SCREEN DRAWING
 
- * Try drawing a sprite
- ldx #31
- ldy #31
+ * Draw animated spider
+ ldx #30
+ ldy #30
  leau spider1,pcr
+ lda frame
+ anda #4
+ beq no@
+ leau spider2,pcr
+no@
+ lbsr DrawSprite
+
+ * Draw animated fireball
+ ldx #90
+ ldy #30
+ leau fireball1,pcr
+ lda frame
+ anda #4
+ beq no@
+ leau fireball2,pcr
+no@
  lbsr DrawSprite
 
  * Draw scheduled sprites

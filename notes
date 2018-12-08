@@ -1,6 +1,10 @@
 
-line routines can be optimized further
+sprite.asm add 6309 vs 6809 conditional assembly
 
-sprites next?  animate explosions?
+slow down explosion animation
+
+targeting reticule instead of green lines
+
+line routines can be optimized further
 
 arbitrary line routine
