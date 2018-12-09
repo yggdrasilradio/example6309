@@ -1,10 +1,6 @@
- opt cd
-
 * X xposition
 * Y yposition
 * U sprite
- opt cc
- opt ct ; total
 
 DrawSprite
 	pshs d,x,y,u
@@ -186,8 +182,6 @@ endrow@
 	lbne row@
 	leas 1,s
 	puls d,x,y,u,pc
-
- opt cc
 
 * Targeting reticule
 reticule
