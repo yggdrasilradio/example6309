@@ -1,10 +1,9 @@
+joystick doesn't respond quite right
 
-sprite.asm add 6309 vs 6809 conditional assembly
-
-slow down explosion animation
-
-targeting reticule instead of green lines
+parameterize animation speeds
 
 line routines can be optimized further
 
 arbitrary line routine
+
+with more colors, sprites can have more realistic shading/colors

@@ -2,27 +2,27 @@
 
  org $0
 
-frame rmb 1
-even  rmb 1
-joyf  rmb 1
-vsync rmb 1
-seed  rmb 2
-tick  rmb 1
-yline rmb 1
-xline rmb 1
-addr1 rmb 2
-addr2 rmb 2
-joyx  rmb 1
-joyy  rmb 1
-lastb rmb 1
-joyb  rmb 1
-flag  rmb 1
-sptr  rmb 2
+frame	rmb 1
+even	rmb 1
+joyf	rmb 1
+vsync	rmb 1
+seed	rmb 2
+tick	rmb 1
+xcurs	rmb 1
+ycurs	rmb 1
+addr1	rmb 2
+addr2	rmb 2
+joyx	rmb 1
+joyy	rmb 1
+lastb	rmb 1
+joyb	rmb 1
+flag	rmb 1
+sptr	rmb 2
  IFDEF M6809
-sreg rmb 2
-wreg rmb 0
-ereg rmb 1
-freg rmb 1
+sreg	rmb 2
+wreg	rmb 0
+ereg	rmb 1
+freg	rmb 1
  ENDC
 
  org $1000
@@ -117,11 +117,11 @@ no@
  * Enable IRQ interrupts
  lbsr EnableIRQ
 
- * Start green lines at center of screen
+ * Start cursor at center of screen
  lda #128/2
- sta xline
+ sta xcurs
  lda #96/2
- sta yline
+ sta ycurs
 
  * Init dot table
  lda #NDOTS 	; number of dots
@@ -179,11 +179,11 @@ mainloop
  * Add explosion sprite
  leau explosion,pcr
  clra
- ldb xline
- subd #4
+ ldb xcurs
+ addd #1
  tfr d,x
- ldb yline
- subd #4
+ ldb ycurs
+ addd #1
  tfr d,y
  lbsr AddSprite
 no@

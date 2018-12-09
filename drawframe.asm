@@ -33,36 +33,36 @@ DrawFrame
  lda #94
  lbsr VLine
 
- * Vertical line following joystick
- ldx #0
- ldy #0
- ldb xline
- addb joyx
- stb xline
- andb #$7F
- abx
- ldb #$22
- lda #96
- lbsr VLine
+; * Vertical line following joystick
+; ldx #0
+; ldy #0
+; ldb xcurs
+; addb joyx
+; stb xcurs
+; andb #$7F
+; abx
+; ldb #$22
+; lda #96
+; lbsr VLine
 
- * Horizontal line following joystick
- ldx #0
- ldy #0
- ldb yline
- addb joyy ; 0 to 95
- cmpb #96
- bne no1@ ; overflow?
- clrb
-no1@
- cmpb #255 ; underflow?
- bne no2@
- ldb #95
-no2@
- stb yline
- leay b,y
- ldb #$22
- lda #128
- lbsr HLine
+; * Horizontal line following joystick
+; ldx #0
+; ldy #0
+; ldb ycurs
+; addb joyy ; 0 to 95
+; cmpb #96
+; bne no1@ ; overflow?
+; clrb
+;no1@
+; cmpb #255 ; underflow?
+; bne no2@
+; ldb #95
+;no2@
+; stb ycurs
+; leay b,y
+; ldb #$22
+; lda #128
+; lbsr HLine
 
 * Turn on border (DEBUG)
 ; lda #5
@@ -137,5 +137,31 @@ no@
 
  * Draw scheduled sprites
  lbsr DrawSprites
+
+ * Update location of targeting reticule
+ ldd xcurs ; update cursor location
+ addd joyx
+ cmpa #1 ; x from 1 to 119
+ bhs >
+ lda #1
+! cmpa #119
+ bls >
+ lda #119
+! cmpb #1 ; y from 1 to 87
+ bhs >
+ ldb #1
+! cmpb #87
+ bls >
+ ldb #87
+! std xcurs
+
+ * Draw targeting reticule
+ leau reticule,pcr
+ clra
+ ldb xcurs
+ tfr d,x
+ ldb ycurs
+ tfr d,y
+ lbsr DrawSprite
 
  rts
