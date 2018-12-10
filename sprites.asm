@@ -268,14 +268,12 @@ fireball2
 InitSprites
  ldu #sprites
  lda #NSPRITES
- pshs a
- ldd #0
+ ldx #0
 loop@
- std SPRITE.ADDR,u
+ stx SPRITE.ADDR,u
  leau sizeof{SPRITE},u
- dec ,s
+ deca
  bne loop@
- leas 1,s
  rts
 
 * U sprite 
