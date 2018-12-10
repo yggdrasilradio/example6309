@@ -33,7 +33,7 @@ odd@
 	orb ,s+
 	stb ,u		; write it out to the screen
 * BYTE 2
-	lda ,x		; sprite data
+	lda ,x+		; sprite data
 	ldb 1,u		; screen byte
 	anda #$0F	; anything in right nibble of sprite data?
 	beq >
@@ -44,8 +44,7 @@ odd@
 	lsla
 	pshs a
 	orb ,s+
-	leax 1,x	; next sprite data
-	lda ,x		; sprite data
+	lda ,x		; next sprite data
 	anda #$F0	; anything in left nibble of sprite data?
 	beq >
 	andb #$F0	; clear out right screen nibble then
@@ -57,7 +56,7 @@ odd@
 	orb ,s+
 	stb 1,u		; write it out to the screen
 * BYTE 3
-	lda ,x		; sprite data
+	lda ,x+		; sprite data
 	ldb 2,u		; screen byte
 	anda #$0F	; anything in right nibble of sprite data?
 	beq >
@@ -68,8 +67,7 @@ odd@
 	lsla
 	pshs a
 	orb ,s+
-	leax 1,x	; next sprite data
-	lda ,x		; sprite data
+	lda ,x		; next sprite data
 	anda #$F0	; anything in left nibble of sprite data?
 	beq >
 	andb #$F0	; clear out right screen nibble then
@@ -81,7 +79,7 @@ odd@
 	orb ,s+
 	stb 2,u		; write it out to the screen
 * BYTE 4
-	lda ,x		; sprite data
+	lda ,x+		; sprite data
 	ldb 3,u		; screen byte
 	anda #$0F	; anything in right nibble of sprite data?
 	beq >
@@ -92,8 +90,7 @@ odd@
 	lsla
 	pshs a
 	orb ,s+
-	leax 1,x	; next sprite data
-	lda ,x		; sprite data
+	lda ,x		; next sprite data
 	anda #$F0	; anything in left nibble of sprite data?
 	beq >
 	andb #$F0	; clear out right screen nibble then
@@ -105,7 +102,7 @@ odd@
 	orb ,s+
 	stb 3,u		; write it out to the screen
 * BYTE 5
-	lda ,x		; sprite data
+	lda ,x+		; sprite data
 	ldb 4,u		; screen byte
 	anda #$0F	; anything in right nibble of sprite data?
 	beq >
@@ -117,13 +114,12 @@ odd@
 	pshs a
 	orb ,s+
 	stb 4,u
-	leax 1,x
  lbra endrow@
 * END ODD ROW
 * BEGIN EVEN ROW
 even@
 * BYTE 1
-	lda ,x		; sprite data
+	lda ,x+		; next sprite data
 	ldb ,u		; screen byte
 	bita #$F0	; anything in left nibble of sprite data?
 	beq >
@@ -134,9 +130,8 @@ even@
 !	pshs a
 	orb ,s+
 	stb ,u		; write it out to the screen
-	leax 1,x	; next byte of sprite data
 * BYTE 2
-	lda ,x		; sprite data
+	lda ,x+		; next sprite data
 	ldb 1,u		; screen byte
 	bita #$F0	; anything in left nibble of sprite data?
 	beq >
@@ -147,9 +142,8 @@ even@
 !	pshs a
 	orb ,s+
 	stb 1,u		; write it out to the screen
-	leax 1,x	; next byte of sprite data
 * BYTE 3
-	lda ,x		; sprite data
+	lda ,x+		; next sprite data
 	ldb 2,u		; screen byte
 	bita #$F0	; anything in left nibble of sprite data?
 	beq >
@@ -160,9 +154,8 @@ even@
 !	pshs a
 	orb ,s+
 	stb 2,u		; write it out to the screen
-	leax 1,x	; next byte of sprite data
 * BYTE 4
-	lda ,x		; sprite data
+	lda ,x+		; next sprite data
 	ldb 3,u		; screen byte
 	bita #$F0	; anything in left nibble of sprite data?
 	beq >
@@ -173,7 +166,6 @@ even@
 !	pshs a
 	orb ,s+
 	stb 3,u		; write it out to the screen
-	leax 1,x	; next byte of sprite data
 * END EVEN ROW *
 endrow@
 	leau 64,u	; next row
