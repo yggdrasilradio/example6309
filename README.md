@@ -28,3 +28,5 @@ Added spider and fireball animations.
 
 Targeting reticule instead of green lines.
 
+Added new sprite code that's slower but has collision detection
+
