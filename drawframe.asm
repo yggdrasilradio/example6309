@@ -114,26 +114,26 @@ no4@
  * END SCREEN DRAWING
 
  * Draw animated spider
- ldx #30
- ldy #30
  leau spider1,pcr
  lda frame
- anda #4
+ anda #2
  beq no@
  leau spider2,pcr
 no@
- lbsr DrawSprite
+ ldb #30
+ lda #30
+ lbsr sprite
 
  * Draw animated fireball
- ldx #90
- ldy #30
  leau fireball1,pcr
  lda frame
- anda #4
+ anda #2
  beq no@
  leau fireball2,pcr
 no@
- lbsr DrawSprite
+ lda #30
+ ldb #90
+ lbsr sprite
 
  * Draw scheduled sprites
  lbsr DrawSprites

@@ -1,7 +1,7 @@
+
 * X xposition
 * Y yposition
 * U sprite
-
 DrawSprite
 	pshs d,x,y,u
 	pshs u		; save sprite data pointer
@@ -177,93 +177,93 @@ endrow@
 
 * Targeting reticule
 reticule
-	fqb %00100010001000000000000000000000 ; WWW.....
-	fqb %00100000000000000000000000000000 ; W.......
-	fqb %00100000000000000000000000000000 ; W.......
+	fqb %00100010001000000000000000000000 ; GGG.....
+	fqb %00100000000000000000000000000000 ; G.......
+	fqb %00100000000000000000000000000000 ; G.......
 	fqb %00000000000000000000000000000000 ; ........
 	fqb %00000000000000000000000000000000 ; ........
-	fqb %00000000000000000000000000000010 ; .......W
-	fqb %00000000000000000000000000000010 ; .......W
-	fqb %00000000000000000000001000100010 ; .....WWW
+	fqb %00000000000000000000000000000010 ; .......G
+	fqb %00000000000000000000000000000010 ; .......G
+	fqb %00000000000000000000001000100010 ; .....GGG
 
 explosion
-	fqb %00000000000000000000000000000000
-	fqb %00000000000000000000000000000000
-	fqb %00000000000011110000000000000000
-	fqb %00000000111111111111000000000000
-	fqb %00000000000011110000000000000000
-	fqb %00000000000000000000000000000000
-	fqb %00000000000000000000000000000000
-	fqb %00000000000000000000000000000000
+	fqb %00000000000000000000000000000000 ; ........
+	fqb %00000000000000000000000000000000 ; ........
+	fqb %00000000000011110000000000000000 ; ...W....
+	fqb %00000000111111111111000000000000 ; ..WWW...
+	fqb %00000000000011110000000000000000 ; ...W....
+	fqb %00000000000000000000000000000000 ; ........
+	fqb %00000000000000000000000000000000 ; ........
+	fqb %00000000000000000000000000000000 ; ........
 
-	fqb %11110000000000000000000011110000
-	fqb %00001111000000000000111100000000
-	fqb %00000000111100111111000000000000
-	fqb %00000000001100110011000000000000
-	fqb %00000000111100111111000000000000
-	fqb %00001111000000000000111100000000
-	fqb %11110000000000000000000011110000
-	fqb %00000000000000000000000000000000
+	fqb %11110000000000000000000011110000 ; W.....W.
+	fqb %00001111000000000000111100000000 ; .W...W..
+	fqb %00000000111100111111000000000000 ; ..WRW...
+	fqb %00000000001100110011000000000000 ; ..RRR...
+	fqb %00000000111100111111000000000000 ; ..WRW...
+	fqb %00001111000000000000111100000000 ; .W...W..
+	fqb %11110000000000000000000011110000 ; W.....W.
+	fqb %00000000000000000000000000000000 ; ........
 
-	fqb %00000000000000000000001100000000
-	fqb %00000011000000001111000000000000
-	fqb %00000000001100000011000000000000
-	fqb %11110000001100110000000000000000
-	fqb %00000000111100000011000000000000
-	fqb %00000000000000000000000000000000
-	fqb %00110000000000000000111100000000
-	fqb %00000000000000000000000000000000
+	fqb %00000000000000000000001100000000 ; .....R..
+	fqb %00000011000000001111000000000000 ; .R..W...
+	fqb %00000000001100000011000000000000 ; ..R.R...
+	fqb %11110000001100110000000000000000 ; W.RR....
+	fqb %00000000111100000011000000000000 ; ..W.R...
+	fqb %00000000000000000000000000000000 ; ........
+	fqb %00110000000000000000111100000000 ; R....W..
+	fqb %00000000000000000000000000000000 ; ........
 
-	fqb %00000000000000000000000000000000
-	fqb %00000000111100000000000000000000
-	fqb %00000000000000000000001100000000
-	fqb %00000000000011110000000000000000
-	fqb %00000000001100000000000000000000
-	fqb %00000000000000000000000000000000
-	fqb %00000000000000000000000000000000
-	fqb %00000000000000000000000000000000
+	fqb %00000000000000000000000000000000 ; ........
+	fqb %00000000111100000000000000000000 ; ..W.....
+	fqb %00000000000000000000001100000000 ; .....R..
+	fqb %00000000000011110000000000000000 ; ..R.....
+	fqb %00000000001100000000000000000000 ; ........
+	fqb %00000000000000000000000000000000 ; ........
+	fqb %00000000000000000000000000000000 ; ........
+	fqb %00000000000000000000000000000000 ; ........
 
 	fdb $FFFF
 
 spider1
-	fqb %00000011000000000000000000110000
-	fqb %00000000001100000000001100000000
-	fqb %00000000000011111111000000000000
-	fqb %00110011001111111111001100110011
-	fqb %00000000001111111111001100000000
-	fqb %00000011000011111111000000110000
-	fqb %00110000000011111111000000000011
-	fqb %00110000000000000000000000000011
+	fqb %00000011000000000000000000110000 ; .R....R.
+	fqb %00000000001100000000001100000000 ; ..R..R..
+	fqb %00000000000011111111000000000000 ; ...WW...
+	fqb %00110011001111111111001100110011 ; RRRWWRRR
+	fqb %00000000001111111111001100000000 ; ..RWWR..
+	fqb %00000011000011111111000000110000 ; .R.WW.R.
+	fqb %00110000000011111111000000000011 ; R..WW..R
+	fqb %00110000000000000000000000000011 ; R......R
 
 spider2
-	fqb %00000000001100000000001100000000
-	fqb %00110000001100000000001100000011
-	fqb %00000011000011111111000000110000
-	fqb %00000000001111111111001100000000
-	fqb %00000000000011111111000000000000
-	fqb %00000011001111111111001100110000
-	fqb %00110000000011111111000000000011
-	fqb %00000000000000000000000000000000
+	fqb %00000000001100000000001100000000 ; ..R..R..
+	fqb %00110000001100000000001100000011 ; R.R..R.R
+	fqb %00000011000011111111000000110000 ; .R.WW.R.
+	fqb %00000000001111111111001100000000 ; ..RWWR..
+	fqb %00000000000011111111000000000000 ; .RRWWRR.
+	fqb %00000011001111111111001100110000 ; .R.WW.R.
+	fqb %00110000000011111111000000000011 ; R..WW..R
+	fqb %00000000000000000000000000000000 ; ........
 
 fireball1
-	fqb %00000011000000000000001100000000
-	fqb %00000000000000110000000000110000
-	fqb %00000011000000000011000000000000
-	fqb %00000011001100110000001100000000
-	fqb %00000000001100110011000000110000
-	fqb %00000000001100110011001100000000
-	fqb %00000000001100110011001100000000
-	fqb %00000000000000110011000000000000
+	fqb %00000011000000000000001100000000 ; .R...R..
+	fqb %00000000000000110000000000110000 ; ...R..R.
+	fqb %00000011000000000011000000000000 ; .R..R...
+	fqb %00000011001100110000001100000000 ; .RRR.R..
+	fqb %00000000001100110011000000110000 ; ..RRR.R.
+	fqb %00000000001100110011001100000000 ; ..RRRR..
+	fqb %00000000001100110011001100000000 ; ..RRRR..
+	fqb %00000000000000110011000000000000 ; ...RR...
 
 fireball2
-	fqb %00000000000000110000000000000000
-	fqb %00000011000000000011000000000000
-	fqb %00000000001100000011000000000000
-	fqb %00000011000000000000000000110000
-	fqb %00000011001100000011001100000000
-	fqb %00000000001100110011001100000000
-	fqb %00000000001100110011001100000000
-	fqb %00000000000000110011000000000000
+	fqb %00000000000000110000000000000000 ; ...R....
+	fqb %00000011000000000011000000000000 ; .R..R...
+	fqb %00000000001100000011000000000000 ; ..R.R...
+	fqb %00000011000000000000000000110000 ; .R....R.
+	fqb %00000011001100000011001100000000 ; .RR.RR..
+	fqb %00000000001100110011001100000000 ; ..RRRR..
+	fqb %00000000001100110011001100000000 ; ..RRRR..
+	fqb %00000000000000110011000000000000 ; ...RR...
 
 InitSprites
  ldu #sprites
@@ -314,13 +314,17 @@ loop@
  ELSE
  stu wreg
  ENDC
- clra
+ ;clra
+ ;ldb SPRITE.XPOS,u
+ ;tfr d,x
+ ;ldb SPRITE.YPOS,u
+ ;tfr d,y
+ ;ldu SPRITE.ADDR,u
+ ;lbsr DrawSprite
+ lda SPRITE.YPOS,u
  ldb SPRITE.XPOS,u
- tfr d,x
- ldb SPRITE.YPOS,u
- tfr d,y
  ldu SPRITE.ADDR,u
- lbsr DrawSprite
+ lbsr sprite
  IFDEF M6309
  tfr w,u
  ELSE
@@ -394,3 +398,119 @@ playerl2
  fqb %00000000011001100000000000000000	;..BB....
  fqb %00000000000000000000000000000000	;........
  fqb %00000000000000000000000000000000	;........
+
+; Render a sprite at coordinates (B,A); exit with Z set if a collision occurred
+; with pixels that were already set. collision will also be set if a collision occurred.
+; The sprite is pointed to in U and has 2 bits per pixel. It is 8 pixels by 8 pixels
+; which means 16 bytes of data.
+;
+; B x coordinate
+; A y coordinate
+; U sprite data
+
+;	0 . pixel data
+;	1 . pixel data
+;	2 . pixel data
+;	3 . pixel data
+;	4 loop counter
+;	5 x
+;	6 y
+;	7 x
+
+sprite	pshs b,a	; save render coordinates
+	pshs b		; save X coordinate for later
+	clr collision	; reset collision flag
+	lda #8		; we're rendering 8 pixels high
+	pshs a		; save counter
+	leas -4,s	; allocate local storage
+LD589	ldd ,u++	; get pixel data for rendering
+	std ,s		; save pixel data
+	ldd ,u++	; get pixel data for rendering
+	std 2,s		; save pixel data
+LD58D	ldd ,s		; look at remaining pixel data
+	addd 2,s
+	beq LD5AF	; brif no more pixels set
+	clra		; clear out extra bits in A
+	lsl 3,s		; shift 4 bits of pixel data into A
+	rol 2,s
+	rol 1,s
+	rol ,s
+	rola
+	lsl 3,s
+	rol 2,s
+	rol 1,s
+	rol ,s
+	rola
+	lsl 3,s
+	rol 2,s
+	rol 1,s
+	rol ,s
+	rola
+	lsl 3,s
+	rol 2,s
+	rol 1,s
+	rol ,s
+	rola
+	anda #$0F	; isolate just those 4 bits
+	beq LD5AB	; brif pixel is not set
+	leay colors,pcr	; point to all pixel color masks
+	lda a,y		; get color mask for this color
+	sta color	; save color mask for rendering
+	ldd 6,s		; get render coordinates
+	lbsr pset	; render pixel on screen
+LD5AB	inc 7,s		; bump X render coordinate
+	bra LD58D	; move on to next pixel
+LD5AF	dec 4,s		; have we rendered all rows?
+	beq LD5BB	; brif so
+	inc 6,s		; bump render Y coordinate
+	lda 5,s		; reset render X coordinate
+	sta 7,s
+	bra LD589	; go render another pixel row
+LD5BB	leas 8,s	; deallocate local storage
+	tst collision	; set Z if no collision
+	rts
+
+* A = y coord
+* B = x coord
+* color = color black, blue, red or white
+* (%00000000, %01010101, %10101010, %11111111)
+* collision = 0 (false), 1 (true)
+pset	cmpa #95	; is the Y coordinate off bottom of screen?
+	bhi LD52E	; brif so
+	cmpb #127	; is the X coordinate off the right of the screen?
+	bhi LD52E	; brif so
+	;cmpa #8	; is the Y coordinate within the text row at the top?
+	;bcs LD52E	; brif so
+	pshs b		; save X coordinate
+	lslb		; compensate for the right shifts below
+	lsra		; * calcuate offset from start of screen; this needs to
+	rorb		; * multiply the row number by 64 and add the column
+	lsra		; * number divided by 2.
+	rorb
+	addd #SCREEN	; add in screen start address
+	tfr d,x		; save byte address in a pointer register
+	puls a		; get back X coordinate
+	anda #1		; find offset in byte
+	leay masks,pcr	; point to pixel masks
+	ldb a,y		; get pixel mask
+	tfr b,a		; put it also in A - we need it twice
+	coma		; flip mask so we clear bits in the screen byte
+	anda ,x		; clear pixel in data byte
+	bitb ,x		; was the pixel set?
+	bne LD524	; brif so - flag collision
+	andb color	; get correct pixel data in the all color byte
+	sta ,x		; save cleared pixel data
+	orb ,x		; merge it with new pixel data
+	stb ,x		; set screen data
+	orcc #4		; set Z (no collision)
+	rts
+
+LD524	inc collision	; flag collision
+	andb color	; get correct pixel data in all color byte
+	sta ,x		; save cleared pixel data
+	orb ,x		; merge it with new pixel data
+	stb ,x		; set screen data
+LD52E	andcc #$fb	; flag collision (Z clear)
+	rts
+
+masks	fcb $F0,$0F

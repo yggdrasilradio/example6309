@@ -2,6 +2,8 @@
 
  org $0
 
+collision rmb 1
+color	rmb 1
 frame	rmb 1
 even	rmb 1
 joyf	rmb 1
