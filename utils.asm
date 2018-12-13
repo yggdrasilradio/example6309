@@ -46,7 +46,7 @@ reset
  IFDEF M6309
  ldd seed
  tfr d,v
- lbsr disable6309
+ bsr disable6309
  ENDC
  ldd  #$8c00
  tfr b,dp        ; reset direct page
@@ -178,13 +178,13 @@ SndOn
  rts
 
 JoyIn
- lbsr SndOff
+ bsr SndOff
  ldb $ff20
  pshs b
- lbsr ReadJoystick
+ bsr ReadJoystick
  puls b
  stb $ff20
- lbsr SndOn
+ bsr SndOn
  rts
 
 KEYCLEAR equ $FD

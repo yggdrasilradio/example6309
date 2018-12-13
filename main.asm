@@ -20,6 +20,7 @@ lastb	rmb 1
 joyb	rmb 1
 flag	rmb 1
 sptr	rmb 2
+sdata	rmb 4
  IFDEF M6809
 sreg	rmb 2
 wreg	rmb 0

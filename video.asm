@@ -279,12 +279,12 @@ FlipScreens
  lbsr WaitForVSync
  com tick
  bne task0@
- lbsr Screen1
- lbsr Task0
+ bsr Screen1
+ bsr Task0
  rts
 task0@
- lbsr Screen0
- lbsr Task1
+ bsr Screen0
+ bsr Task1
  rts
 
 Task0

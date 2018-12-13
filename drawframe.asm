@@ -116,7 +116,7 @@ no4@
  * Draw animated spider
  leau spider1,pcr
  lda frame
- anda #2
+ anda #4	; speed
  beq no@
  leau spider2,pcr
 no@
@@ -127,7 +127,7 @@ no@
  * Draw animated fireball
  leau fireball1,pcr
  lda frame
- anda #2
+ anda #4	; speed
  beq no@
  leau fireball2,pcr
 no@

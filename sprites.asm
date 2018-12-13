@@ -407,66 +407,62 @@ playerl2
 ; B x coordinate
 ; A y coordinate
 ; U sprite data
-
-;	0 . pixel data
-;	1 . pixel data
-;	2 . pixel data
-;	3 . pixel data
-;	4 loop counter
-;	5 x
-;	6 y
-;	7 x
+;
+; STACK:
+;	0 loop counter
+;	1 X coordinate of sprite
+;	2 Y coordinate of sprite
+;	3 current X value
 
 sprite	pshs b,a	; save render coordinates
 	pshs b		; save X coordinate for later
 	clr collision	; reset collision flag
 	lda #8		; we're rendering 8 pixels high
 	pshs a		; save counter
-	leas -4,s	; allocate local storage
 LD589	ldd ,u++	; get pixel data for rendering
-	std ,s		; save pixel data
+	std sdata	; save pixel data
 	ldd ,u++	; get pixel data for rendering
-	std 2,s		; save pixel data
-LD58D	ldd ,s		; look at remaining pixel data
-	addd 2,s
+	std sdata+2	; save pixel data
+LD58D	ldd sdata	; look at remaining pixel data
+	addd sdata+2
 	beq LD5AF	; brif no more pixels set
 	clra		; clear out extra bits in A
-	lsl 3,s		; shift 4 bits of pixel data into A
-	rol 2,s
-	rol 1,s
-	rol ,s
+	lsl sdata+3	; shift 4 bits of pixel data into A
+	rol sdata+2
+	rol sdata+1
+	rol sdata
 	rola
-	lsl 3,s
-	rol 2,s
-	rol 1,s
-	rol ,s
+	lsl sdata+3
+	rol sdata+2
+	rol sdata+1
+	rol sdata
 	rola
-	lsl 3,s
-	rol 2,s
-	rol 1,s
-	rol ,s
+	lsl sdata+3
+	rol sdata+2
+	rol sdata+1
+	rol sdata
 	rola
-	lsl 3,s
-	rol 2,s
-	rol 1,s
-	rol ,s
+	lsl sdata+3
+	rol sdata+2
+	rol sdata+1
+	rol sdata
 	rola
 	anda #$0F	; isolate just those 4 bits
 	beq LD5AB	; brif pixel is not set
 	leay colors,pcr	; point to all pixel color masks
 	lda a,y		; get color mask for this color
 	sta color	; save color mask for rendering
-	ldd 6,s		; get render coordinates
-	lbsr pset	; render pixel on screen
-LD5AB	inc 7,s		; bump X render coordinate
+	ldd 2,s		; get render coordinates
+	bsr pset	; render pixel on screen
+LD5AB	inc 3,s		; bump X render coordinate
 	bra LD58D	; move on to next pixel
-LD5AF	dec 4,s		; have we rendered all rows?
+LD5AF	dec ,s		; have we rendered all rows?
 	beq LD5BB	; brif so
-	inc 6,s		; bump render Y coordinate
-	lda 5,s		; reset render X coordinate
-	sta 7,s
+	inc 2,s		; bump render Y coordinate
+	lda 1,s		; reset render X coordinate
+	sta 3,s
 	bra LD589	; go render another pixel row
-LD5BB	leas 8,s	; deallocate local storage
+LD5BB	leas 4,s	; deallocate local storage
 	tst collision	; set Z if no collision
 	rts
 
