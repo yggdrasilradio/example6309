@@ -163,9 +163,9 @@ sexit	leas 4,s	; deallocate local storage
 	rts
 
 setpixel
-	pshs d,u,x,y
+	pshs d
 	bsr pset
-	puls d,u,x,y,pc
+	puls d,pc
 
 * A = y coord
 * B = x coord
