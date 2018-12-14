@@ -58,13 +58,13 @@ sprites rmb sizeof{SPRITE}*(NSPRITES+1)
 
 start
 
+ * Disable IRQ and FIRQ
+ lbsr DisableIRQ
+
  * Enable 6309 native mode
  IFDEF M6309
  lbsr enable6309
  ENDC
-
- * Disable IRQ and FIRQ
- lbsr DisableIRQ
 
  * Relocate stack
  lds #STACK
@@ -114,12 +114,6 @@ no@
  lbsr Task1
  lbsr gfxcls
 
- * Initialize IRQ routine
- lbsr InitIRQ
-
- * Enable IRQ interrupts
- lbsr EnableIRQ
-
  * Start cursor at center of screen
  lda #128/2
  sta xcurs
@@ -164,6 +158,12 @@ no@
  bne loop@
  clr ,u		; end of table
  puls a
+
+ * Initialize IRQ routine
+ lbsr InitIRQ
+
+ * Enable IRQ interrupts
+ lbsr EnableIRQ
 
 mainloop
 
@@ -254,6 +254,7 @@ no@
  incl drawframe.asm
  incl laser.asm
  incl sprites.asm
+ incl spritedata.asm
 
 SCREEN EQU $E000
 

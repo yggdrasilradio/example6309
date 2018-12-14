@@ -225,56 +225,6 @@ loop@
  ENDC
  rts
 
-; Set pixel
-; 128 x 96, 16 colors
-; X is x 0-127
-; Y is y 0-95
-; B is color $00,$11,$22...$FF
- IFDEF M6309
-gfxpset
- pshs d,x,y,u
- lbsr ScreenByte
- lda 1,s ; color
- ldb ,u ; get screen byte
- bcc even@
- IFDEF M6309
- andd #$0FF0
- ELSE
- anda #$0F
- andb #$F0
- ENDC
- bra cont@
-even@
- IFDEF M6309
- andd #$F00F
- ELSE
- anda #$F0
- andb #$0F
- ENDC
-cont@
- orr a,b  
- stb ,u ; replace screen byte
- puls d,x,y,u,pc
- ELSE
-gfxpset
- pshs d,u
- lbsr ScreenByte
- lda 1,s ; color
- ldb ,u ; screen byte
- bcc even@
- anda #$0F
- andb #$F0
- bra cont@
-even@
- anda #$F0
- andb #$0F
-cont@
- pshs a
- orb ,s+
- stb ,u ; replace screen byte
- puls d,u,pc
- ENDC
-
 FlipScreens
  lbsr WaitForVSync
  com tick
@@ -441,18 +391,17 @@ loop@
  rts
 
 ; Draw dot
-; X is x 0-127
-; Y is y 0-95
-; B is color $00,$11,$22...$FF
+; A is y 0-95
+; B is x 0-127
+; color is color
 DrawDot
- lbsr gfxpset
- leax 1,x
- lbsr gfxpset
- leay 1,y
- lbsr gfxpset
- leax -1,x
- lbsr gfxpset
- leay -1,y
+ lbsr setpixel
+ incb
+ lbsr setpixel
+ inca
+ lbsr setpixel
+ decb
+ lbsr setpixel
  rts
 
 colors

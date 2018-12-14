@@ -33,41 +33,6 @@ DrawFrame
  lda #94
  lbsr VLine
 
-; * Vertical line following joystick
-; ldx #0
-; ldy #0
-; ldb xcurs
-; addb joyx
-; stb xcurs
-; andb #$7F
-; abx
-; ldb #$22
-; lda #96
-; lbsr VLine
-
-; * Horizontal line following joystick
-; ldx #0
-; ldy #0
-; ldb ycurs
-; addb joyy ; 0 to 95
-; cmpb #96
-; bne no1@ ; overflow?
-; clrb
-;no1@
-; cmpb #255 ; underflow?
-; bne no2@
-; ldb #95
-;no2@
-; stb ycurs
-; leay b,y
-; ldb #$22
-; lda #128
-; lbsr HLine
-
-* Turn on border (DEBUG)
-; lda #5
-; sta $ff9a
-
  * Bouncing colored dots
  ldu #table
 loop@
@@ -101,17 +66,14 @@ no4@
  lda DOT.YPOS,u	; update Y
  adda DOT.YDELTA,u
  sta DOT.YPOS,u
- clra		; draw dot
+ lda DOT.COLOR,u
+ sta color
+ lda DOT.YPOS,u
  ldb DOT.XPOS,u
- tfr d,x
- ldb DOT.YPOS,u
- tfr d,y
- ldb DOT.COLOR,u
  lbsr DrawDot
  leau sizeof{DOT},u
  tst ,u
  bne loop@
- * END SCREEN DRAWING
 
  * Draw animated spider
  leau spider1,pcr
@@ -157,11 +119,10 @@ no@
 
  * Draw targeting reticule
  leau reticule,pcr
- clra
  ldb xcurs
- tfr d,x
- ldb ycurs
- tfr d,y
- lbsr DrawSprite
+ lda ycurs
+ lbsr sprite
+
+ * END SCREEN DRAWING
 
  rts
