@@ -84,7 +84,7 @@ no4@
 no@
  ldb #30
  lda #30
- lbsr sprite
+ lbsr DrawSprite
 
  * Draw animated fireball
  leau fireball1,pcr
@@ -95,7 +95,7 @@ no@
 no@
  lda #30
  ldb #90
- lbsr sprite
+ lbsr DrawSprite
 
  * Draw scheduled sprites
  lbsr DrawSprites
@@ -121,7 +121,7 @@ no@
  leau reticule,pcr
  ldb xcurs
  lda ycurs
- lbsr sprite
+ lbsr DrawSprite
 
  * END SCREEN DRAWING
 

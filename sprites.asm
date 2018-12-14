@@ -51,7 +51,7 @@ loop@
  lda SPRITE.YPOS,u
  ldb SPRITE.XPOS,u
  ldu SPRITE.ADDR,u
- lbsr sprite
+ lbsr DrawSprite
  IFDEF M6309
  tfr w,u
  ELSE
@@ -88,7 +88,7 @@ endloop@
 ;	2 Y coordinate of sprite
 ;	3 current X value
 
-sprite	pshs b,a	; save render coordinates
+DrawSprite pshs b,a	; save render coordinates
 	pshs b		; save X coordinate for later
 	clr collision	; reset collision flag
 	lda #8		; we're rendering 8 pixels high
