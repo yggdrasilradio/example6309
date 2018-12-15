@@ -179,7 +179,7 @@ Pset	cmpa #95	; is the Y coordinate off bottom of screen?
 	bhi LD52E	; brif so
 	;cmpa #8	; is the Y coordinate within the text row at the top?
 	;bcs LD52E	; brif so
-	pshs b		; save X coordinate
+	stb temp	; save X coordinate
 	lslb		; compensate for the right shifts below
 	lsra		; * calcuate offset from start of screen; this needs to
 	rorb		; * multiply the row number by 64 and add the column
@@ -187,7 +187,7 @@ Pset	cmpa #95	; is the Y coordinate off bottom of screen?
 	rorb
 	ora #$E0	; add in screen start address
 	tfr d,x		; save byte address in a pointer register
-	puls a		; get back X coordinate
+	lda temp	; get back X coordinate
 	anda #1		; find offset in byte
 	lsla		; *2
 	ldd a,y		; get pixel masks
@@ -195,16 +195,16 @@ Pset	cmpa #95	; is the Y coordinate off bottom of screen?
 	bitb ,x		; was the pixel set?
 	bne LD524	; brif so, flag collision
 	andb color	; get correct pixel data in the all color byte
-	sta ,x		; save cleared pixel data
-	orb ,x		; merge it with new pixel data
+	sta temp	; save cleared pixel data
+	orb temp	; merge it with new pixel data
 	stb ,x		; set screen data
 	orcc #4		; set Z (no collision)
 	rts
 
 LD524	inc collision	; flag collision
 	andb color	; get correct pixel data in all color byte
-	sta ,x		; save cleared pixel data
-	orb ,x		; merge it with new pixel data
+	sta temp	; save cleared pixel data
+	orb temp	; merge it with new pixel data
 	stb ,x		; set screen data
 LD52E	andcc #$fb	; flag collision (Z clear)
 	rts

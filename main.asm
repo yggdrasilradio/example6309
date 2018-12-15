@@ -19,6 +19,7 @@ joyy	rmb 1
 lastb	rmb 1
 joyb	rmb 1
 sptr	rmb 2
+temp	rmb 1
  IFDEF M6809
 sreg	rmb 2
 wreg	rmb 0
