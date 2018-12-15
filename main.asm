@@ -1,3 +1,4 @@
+ opt c
  setdp 0
 
  org $0
@@ -5,7 +6,6 @@
 collision rmb 1
 color	rmb 1
 frame	rmb 1
-even	rmb 1
 joyf	rmb 1
 vsync	rmb 1
 seed	rmb 2
@@ -18,9 +18,7 @@ joyx	rmb 1
 joyy	rmb 1
 lastb	rmb 1
 joyb	rmb 1
-flag	rmb 1
 sptr	rmb 2
-sdata	rmb 4
  IFDEF M6809
 sreg	rmb 2
 wreg	rmb 0

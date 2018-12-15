@@ -91,68 +91,69 @@ endloop@
 DrawSprite pshs b,a	; save render coordinates
 	pshs b		; save X coordinate for later
 	clr collision	; reset collision flag
+	leay masks,pcr
 	lda #8		; we're rendering 8 pixels high
 	pshs a		; save counter
-
 sloop
 	lda ,u+
 	beq >		; brif pixel is not set
 	sta color	; save color mask for rendering
 	ldd 2,s		; get render coordinates
-	bsr pset	; render pixel on screen
+	bsr Pset	; render pixel on screen
 !	inc 3,s		; bump X render coordinate
 
 	lda ,u+
 	beq >		; brif pixel is not set
 	sta color	; save color mask for rendering
 	ldd 2,s		; get render coordinates
-	bsr pset	; render pixel on screen
+	bsr Pset	; render pixel on screen
 !	inc 3,s		; bump X render coordinate
 
 	lda ,u+
 	beq >		; brif pixel is not set
 	sta color	; save color mask for rendering
 	ldd 2,s		; get render coordinates
-	bsr pset	; render pixel on screen
+	bsr Pset	; render pixel on screen
 !	inc 3,s		; bump X render coordinate
 
 	lda ,u+
 	beq >		; brif pixel is not set
 	sta color	; save color mask for rendering
 	ldd 2,s		; get render coordinates
-	bsr pset	; render pixel on screen
+	bsr Pset	; render pixel on screen
 !	inc 3,s		; bump X render coordinate
 
 	lda ,u+
 	beq >		; brif pixel is not set
 	sta color	; save color mask for rendering
 	ldd 2,s		; get render coordinates
-	bsr pset	; render pixel on screen
+	bsr Pset	; render pixel on screen
 !	inc 3,s		; bump X render coordinate
 
 	lda ,u+
 	beq >		; brif pixel is not set
 	sta color	; save color mask for rendering
 	ldd 2,s		; get render coordinates
-	bsr pset	; render pixel on screen
+	bsr Pset	; render pixel on screen
 !	inc 3,s		; bump X render coordinate
 
 	lda ,u+
 	beq >		; brif pixel is not set
 	sta color	; save color mask for rendering
 	ldd 2,s		; get render coordinates
-	bsr pset	; render pixel on screen
+	bsr Pset	; render pixel on screen
 !	inc 3,s		; bump X render coordinate
 
 	lda ,u+
 	beq >		; brif pixel is not set
 	sta color	; save color mask for rendering
 	ldd 2,s		; get render coordinates
-	bsr pset	; render pixel on screen
+	bsr Pset	; render pixel on screen
 !	inc 3,s		; bump X render coordinate
 
 	dec ,s		; have we rendered all rows?
 	beq sexit	; brif so
+
 	inc 2,s		; bump Y coordinate
 	lda 1,s		; reset X coordinate
 	sta 3,s
@@ -162,17 +163,17 @@ sexit	leas 4,s	; deallocate local storage
 	tst collision	; set Z if no collision
 	rts
 
-setpixel
+SetPixel
 	pshs d
-	bsr pset
+	leay masks,pcr	; point to pixel masks
+	bsr Pset
 	puls d,pc
 
 * A = y coord
 * B = x coord
-* color = color black, blue, red or white
-* (%00000000, %01010101, %10101010, %11111111)
+* color = color (%00000000, %01010101, %10101010, ... %11111111)
 * collision = 0 (false), 1 (true)
-pset	cmpa #95	; is the Y coordinate off bottom of screen?
+Pset	cmpa #95	; is the Y coordinate off bottom of screen?
 	bhi LD52E	; brif so
 	cmpb #127	; is the X coordinate off the right of the screen?
 	bhi LD52E	; brif so
@@ -182,19 +183,17 @@ pset	cmpa #95	; is the Y coordinate off bottom of screen?
 	lslb		; compensate for the right shifts below
 	lsra		; * calcuate offset from start of screen; this needs to
 	rorb		; * multiply the row number by 64 and add the column
-	lsra		; * number divided by 2.
+	lsra		; * number divided by 2
 	rorb
-	addd #SCREEN	; add in screen start address
+	ora #$E0	; add in screen start address
 	tfr d,x		; save byte address in a pointer register
 	puls a		; get back X coordinate
 	anda #1		; find offset in byte
-	leay masks,pcr	; point to pixel masks
-	ldb a,y		; get pixel mask
-	tfr b,a		; put it also in A - we need it twice
-	coma		; flip mask so we clear bits in the screen byte
+	lsla		; *2
+	ldd a,y		; get pixel masks
 	anda ,x		; clear pixel in data byte
 	bitb ,x		; was the pixel set?
-	bne LD524	; brif so - flag collision
+	bne LD524	; brif so, flag collision
 	andb color	; get correct pixel data in the all color byte
 	sta ,x		; save cleared pixel data
 	orb ,x		; merge it with new pixel data
@@ -210,4 +209,4 @@ LD524	inc collision	; flag collision
 LD52E	andcc #$fb	; flag collision (Z clear)
 	rts
 
-masks	fcb $F0,$0F
+masks	fdb $0FF0,$F00F

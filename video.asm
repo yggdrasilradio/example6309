@@ -395,13 +395,13 @@ loop@
 ; B is x 0-127
 ; color is color
 DrawDot
- lbsr setpixel
+ lbsr SetPixel
  incb
- lbsr setpixel
+ lbsr SetPixel
  inca
- lbsr setpixel
+ lbsr SetPixel
  decb
- lbsr setpixel
+ lbsr SetPixel
  rts
 
 colors
