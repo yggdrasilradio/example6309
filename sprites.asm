@@ -174,18 +174,18 @@ SetPixel
 * color = color (%00000000, %01010101, %10101010, ... %11111111)
 * collision = 0 (false), 1 (true)
 Pset	cmpa #95	; is the Y coordinate off bottom of screen?
-	bhi LD52E	; brif so
+	bhi pclip	; brif so
 	cmpb #127	; is the X coordinate off the right of the screen?
-	bhi LD52E	; brif so
+	bhi pclip	; brif so
 	cmpa #8		; is the Y coordinate within the text row at the top?
-	bcs LD52E	; brif so
+	bcs pclip	; brif so
 	stb temp	; save X coordinate
 	lslb		; compensate for the right shifts below
 	lsra		; * calcuate offset from start of screen; this needs to
 	rorb		; * multiply the row number by 64 and add the column
 	lsra		; * number divided by 2
 	rorb
-	ora #$E0	; add in screen start address
+	adda #$E0	; add in screen start address
 	tfr d,x		; save byte address in a pointer register
 	lda temp	; get back X coordinate
 	anda #1		; find offset in byte
@@ -193,20 +193,16 @@ Pset	cmpa #95	; is the Y coordinate off bottom of screen?
 	ldd a,y		; get pixel masks
 	anda ,x		; clear pixel in data byte
 	bitb ,x		; was the pixel set?
-	bne LD524	; brif so, flag collision
-	andb color	; get correct pixel data in the all color byte
+	beq >		; brif not
+	inc collision	; flag collision
+!	andb color	; get correct pixel data in the all color byte
+ IFDEF M6309
+	orr a,b		; merge cleared pixel data with new pixel data
+ ELSE
 	sta temp	; save cleared pixel data
 	orb temp	; merge it with new pixel data
+ ENDC
 	stb ,x		; set screen data
-	orcc #4		; set Z (no collision)
-	rts
-
-LD524	inc collision	; flag collision
-	andb color	; get correct pixel data in all color byte
-	sta temp	; save cleared pixel data
-	orb temp	; merge it with new pixel data
-	stb ,x		; set screen data
-LD52E	andcc #$fb	; flag collision (Z clear)
-	rts
+pclip	rts
 
 masks	fdb $0FF0,$F00F
