@@ -177,8 +177,8 @@ Pset	cmpa #95	; is the Y coordinate off bottom of screen?
 	bhi LD52E	; brif so
 	cmpb #127	; is the X coordinate off the right of the screen?
 	bhi LD52E	; brif so
-	;cmpa #8	; is the Y coordinate within the text row at the top?
-	;bcs LD52E	; brif so
+	cmpa #8		; is the Y coordinate within the text row at the top?
+	bcs LD52E	; brif so
 	stb temp	; save X coordinate
 	lslb		; compensate for the right shifts below
 	lsra		; * calcuate offset from start of screen; this needs to

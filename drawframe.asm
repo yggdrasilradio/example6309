@@ -14,24 +14,24 @@ DrawFrame
  ldy #0
  ldb #$11
  lda #126
- lbsr HLine
+; lbsr HLine
  ldx #1
  ldy #95
  ldb #$11
  lda #126
- lbsr HLine
+; lbsr HLine
 
  * Vertical lines at left and right edges of screen
  ldx #0
  ldy #1
  ldb #$11
  lda #94
- lbsr VLine
+; lbsr VLine
  ldx #127
  ldy #1
  ldb #$11
  lda #94
- lbsr VLine
+; lbsr VLine
 
  * Bouncing colored dots
  ldu #table
@@ -50,7 +50,7 @@ no1@
 no2@
  * BOUNCE Y
  lda DOT.YPOS,u
- cmpa #1
+ cmpa #9
  bhi no3@
  ldb #1
  stb DOT.YDELTA,u
@@ -82,10 +82,25 @@ no4@
  beq no@
  leau spider2,pcr
 no@
- ldb #30
- lda #30
+ lda yspid ; y
+ ldb xspid ; x
  lbsr DrawSprite
 
+ * Move spider
+ lda xspid
+ adda xspidd
+ sta xspid
+ cmpa #127-8
+ blo >
+ ldb #$ff
+ stb xspidd
+!
+ cmpa #2
+ bhi >
+ ldb #1
+ stb xspidd
+!
+ 
  * Draw animated fireball
  leau fireball1,pcr
  lda frame
@@ -93,29 +108,55 @@ no@
  beq no@
  leau fireball2,pcr
 no@
- lda #30
- ldb #90
+ lda yfire
+ ldb xfire
  lbsr DrawSprite
 
+ * Move fireball
+ lda xfire
+ adda xfired
+ sta xfire
+ cmpa #127-8
+ blo >
+ ldb #$ff
+ stb xfired
+!
+ cmpa #2
+ bhi >
+ ldb #1
+ stb xfired
+!
  * Draw scheduled sprites
  lbsr DrawSprites
 
  * Update location of targeting reticule
  ldd xcurs ; update cursor location
- addd joyx
+ adda joyx
+ addb joyy
  cmpa #1 ; x from 1 to 119
  bhs >
  lda #1
 ! cmpa #119
  bls >
  lda #119
-! cmpb #1 ; y from 1 to 87
+! cmpb #9 ; y from 9 to 87
  bhs >
- ldb #1
+ ldb #9
 ! cmpb #87
  bls >
  ldb #87
 ! std xcurs
+
+ * Draw player
+ leau playerr1,pcr
+ lda frame
+ anda #4	; speed
+ beq no@
+ leau playerr2,pcr
+no@
+ ldb #10
+ lda #10
+ lbsr DrawSprite
 
  * Draw targeting reticule
  leau reticule,pcr

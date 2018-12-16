@@ -105,7 +105,7 @@ gfxinit
  sta $FFBB
  lda #31 	; 12 CYAN
  sta $FFBC
- lda #38 	; 13 ORANGE
+ lda #41 	; 13 PURPLE
  sta $FFBD
  lda #38 	; 14 ORANGE
  sta $FFBE
@@ -113,7 +113,7 @@ gfxinit
  sta $FFBF
 
 ; BORDER COLOR REGISTER $FF9A
- lda #0		; BLACK
+ lda #$FF	; WHITE
  sta $ff9A
 
  rts
@@ -159,14 +159,15 @@ gfxcls
  * 21 x 32 x 9 bytes 
  IFDEF M6309
  tfr 0,d
- lde #21
+ lde #19
  ELSE
- lda #21
+ lda #19
  sta ereg
  ldd #0
  ENDC
  lds #SCREEN+6144
 loop@
+; 19 x 32 x 9 bytes = 5472 bytes
  pshs d,x,y,u,dp
  pshs d,x,y,u,dp
  pshs d,x,y,u,dp
@@ -205,7 +206,7 @@ loop@
  dec ereg
  ENDC
  bne loop@
- * 10 x 9 bytes
+ * 17 x 9 bytes = 153 bytes
  pshs d,x,y,u,dp
  pshs d,x,y,u,dp
  pshs d,x,y,u,dp
@@ -216,8 +217,50 @@ loop@
  pshs d,x,y,u,dp
  pshs d,x,y,u,dp
  pshs d,x,y,u,dp
- * 6 bytes
- pshs d,x,y
+ pshs d,x,y,u,dp
+ pshs d,x,y,u,dp
+ pshs d,x,y,u,dp
+ pshs d,x,y,u,dp
+ pshs d,x,y,u,dp
+ pshs d,x,y,u,dp
+ pshs d,x,y,u,dp
+ * 7 bytes
+ pshs a,x,y,u
+* WHITE FOR 8 ROWS = 512 bytes
+ IFDEF M6309
+ lde #4
+ ELSE
+ lda #4
+ sta ereg
+ ENDC
+ ldd #$ffff
+ ldx #$ffff
+ ldy #$ffff
+ ldu #$ffff
+; 4 x 16 x 8 bytes = 512 bytes
+loop2@
+ pshs d,x,y,u
+ pshs d,x,y,u
+ pshs d,x,y,u
+ pshs d,x,y,u
+ pshs d,x,y,u
+ pshs d,x,y,u
+ pshs d,x,y,u
+ pshs d,x,y,u
+ pshs d,x,y,u
+ pshs d,x,y,u
+ pshs d,x,y,u
+ pshs d,x,y,u
+ pshs d,x,y,u
+ pshs d,x,y,u
+ pshs d,x,y,u
+ pshs d,x,y,u
+ IFDEF M6309
+ dece
+ ELSE
+ dec ereg
+ ENDC
+ bne loop2@
  IFDEF M6309
  tfr v,s
  ELSE

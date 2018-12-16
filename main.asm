@@ -20,6 +20,12 @@ lastb	rmb 1
 joyb	rmb 1
 sptr	rmb 2
 temp	rmb 1
+xfire	rmb 1
+yfire	rmb 1
+xfired	rmb 1
+xspid	rmb 1
+yspid	rmb 1
+xspidd	rmb 1
  IFDEF M6809
 sreg	rmb 2
 wreg	rmb 0
@@ -131,9 +137,10 @@ loop@
  inca
  sta DOT.XPOS,u
  lbsr rand	; random y
- lda #93
+ lda #93-8
  mul
  inca
+ adda #8
  sta DOT.YPOS,u
  lbsr rand	; random xdelta, going to be 1 or FF
  lda #1
@@ -157,6 +164,20 @@ no@
  bne loop@
  clr ,u		; end of table
  puls a
+
+ * Init fireball and spider
+ lda #30 ; y
+ ldb #30 ; x
+ sta yspid
+ stb xspid
+ lda #60 ; y
+ ldb #90 ; x
+ sta yfire
+ stb xfire
+ lda #1
+ stb xspidd
+ lda #$ff
+ stb xfired
 
  * Initialize IRQ routine
  lbsr InitIRQ
@@ -190,11 +211,11 @@ mainloop
  lbsr AddSprite
 no@
 
- ldd sptr  ; is sound being played?
- beq no@
- lda #100  ; if so, set border to red
-no@
- sta $ff9a ; otherwise set to black
+; ldd sptr  ; is sound being played?
+; beq no@
+; lda #100  ; if so, set border to red
+;no@
+; sta $ff9a ; otherwise set to black
 
  * BEGIN SCREEN DRAWING
  lbsr DrawFrame
