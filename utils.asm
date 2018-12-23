@@ -103,7 +103,10 @@ InitMMU
  std ,x++
  rts
 
-;Task 0: $38 $39 $3A $3B $3C $3D $3E $3F
+
+;        FFA0 FFA1 FFA2 FFA3 FFA4 FFA5 FFA6 FFA7
+;Task 0: $38  $39  $3A  $3B  $3C  $3D  $3E  $3F
+;	 0000 2000 4000 6000 8000 A000 C000 E000
 
 taskmap0
  fdb $3839

@@ -302,8 +302,13 @@ Screen1
  stb $FF9E	; LSB = (addr / 8) AND $ff
  rts
 
-* X xpos
-* Y ypos
+ * Draw vertical line
+ * A = top Y coordinate
+ * B = bottom Y coordinate
+ * X = X coordinate
+
+* X = X coordinate
+* Y = Y coordinate
 * A length
 * B color
 VLine

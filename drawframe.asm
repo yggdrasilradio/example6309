@@ -158,6 +158,29 @@ no@
  lda #10
  lbsr DrawSprite
 
+ * Draw bat
+ leau bat1,pcr
+ lda frame
+ anda #8	; speed
+ beq no@
+ leau bat2,pcr
+no@
+ ldb #10
+ lda #30
+ lbsr DrawSprite
+
+ * Draw cup
+ leau cup,pcr
+ ldb #10
+ lda #60
+ lbsr DrawSprite
+
+ * Draw cup
+ leau pitcher,pcr
+ ldb #10
+ lda #80
+ lbsr DrawSprite
+
  * Draw targeting reticule
  leau reticule,pcr
  ldb xcurs
