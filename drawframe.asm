@@ -126,8 +126,6 @@ no@
  ldb #1
  stb xfired
 !
- * Draw scheduled sprites
- lbsr DrawSprites
 
  * Update location of targeting reticule
  ldd xcurs ; update cursor location
@@ -148,13 +146,14 @@ no@
 ! std xcurs
 
  * Draw player
+dloop
  leau playerr1,pcr
  lda frame
  anda #4	; speed
  beq no@
  leau playerr2,pcr
 no@
- ldb #10
+ ldb #2
  lda #10
  lbsr DrawSprite
 
@@ -165,20 +164,32 @@ no@
  beq no@
  leau bat2,pcr
 no@
- ldb #10
- lda #30
+ ldb #12
+ lda #10
  lbsr DrawSprite
 
  * Draw cup
  leau cup,pcr
- ldb #10
- lda #60
+ ldb #22
+ lda #10
  lbsr DrawSprite
 
- * Draw cup
+ * Draw pitcher
  leau pitcher,pcr
- ldb #10
- lda #80
+ ldb #32
+ lda #10
+ lbsr DrawSprite
+
+ * Draw ball
+ leau ball,pcr
+ ldb #42
+ lda #10
+ lbsr DrawSprite
+
+ * Draw crown
+ leau crown,pcr
+ ldb #52
+ lda #10
  lbsr DrawSprite
 
  * Draw targeting reticule
@@ -186,6 +197,9 @@ no@
  ldb xcurs
  lda ycurs
  lbsr DrawSprite
+
+ * Draw scheduled sprites last
+ lbsr DrawSprites
 
  * END SCREEN DRAWING
 
