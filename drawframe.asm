@@ -9,29 +9,8 @@ DrawFrame
 ; lda #55
 ; sta $ff9a
 
- * Horizontal lines at top and bottom edges of screen
- ldx #1
- ldy #0
- ldb #$11
- lda #126
-; lbsr HLine
- ldx #1
- ldy #95
- ldb #$11
- lda #126
-; lbsr HLine
-
- * Vertical lines at left and right edges of screen
- ldx #0
- ldy #1
- ldb #$11
- lda #94
-; lbsr VLine
- ldx #127
- ldy #1
- ldb #$11
- lda #94
-; lbsr VLine
+ * Draw maze walls
+ lbsr DoLines
 
  * Bouncing colored dots
  ldu #table
@@ -165,30 +144,6 @@ no@
  leau bat2,pcr
 no@
  ldb #12
- lda #10
- lbsr DrawSprite
-
- * Draw cup
- leau cup,pcr
- ldb #22
- lda #10
- lbsr DrawSprite
-
- * Draw pitcher
- leau pitcher,pcr
- ldb #32
- lda #10
- lbsr DrawSprite
-
- * Draw ball
- leau ball,pcr
- ldb #42
- lda #10
- lbsr DrawSprite
-
- * Draw crown
- leau crown,pcr
- ldb #52
  lda #10
  lbsr DrawSprite
 

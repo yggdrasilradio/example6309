@@ -26,6 +26,10 @@ xfired	rmb 1
 xspid	rmb 1
 yspid	rmb 1
 xspidd	rmb 1
+mazeoffx rmb 2
+mazeoffy rmb 2
+curposx rmb 1
+curposy rmb 1
  IFDEF M6809
 sreg	rmb 2
 wreg	rmb 0
@@ -93,6 +97,9 @@ start
 
  * Initialize MMU
  lbsr InitMMU
+
+ * Set starting position
+ lbsr SetStartPos
 
  * Seed random number routine
  IFDEF M6309
@@ -275,6 +282,7 @@ no@
  incl laser.asm
  incl sprites.asm
  incl spritedata.asm
+ incl lines.asm
 
 SCREEN EQU $E000
 
