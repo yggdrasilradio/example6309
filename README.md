@@ -30,3 +30,4 @@ Targeting reticule instead of green lines.
 
 Added new sprite code that's slower but has collision detection
 
+Now draws Temple of ROM walls for the first time!
