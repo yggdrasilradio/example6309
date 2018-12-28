@@ -13,8 +13,6 @@ seed	rmb 2
 tick	rmb 1
 xcurs	rmb 1
 ycurs	rmb 1
-addr1	rmb 2
-addr2	rmb 2
 joyx	rmb 1
 joyy	rmb 1
 lastb	rmb 1
@@ -27,12 +25,6 @@ xfired	rmb 1
 xspid	rmb 1
 yspid	rmb 1
 xspidd	rmb 1
-mazeoffx rmb 2
-mazeoffy rmb 2
-curposx rmb 1
-curposy rmb 1
-odd1	rmb 1
-odd2	rmb 1
  IFDEF M6809
 sreg	rmb 2
 wreg	rmb 0
@@ -203,7 +195,6 @@ mainloop
  tst joyb	; joystick button pressed?
  beq no@
  * Start laser sound
- inc mazeoffx+1 ; hold my beer
  leau laser,pcr
  stu sptr
  clr joyb
