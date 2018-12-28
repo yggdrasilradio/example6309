@@ -5,9 +5,11 @@ SetStartPos
  ldd #62*256+46		; default screen position (62,46)
  sta curposx		; set horizontal position
  stb curposy		; set vertical position
- ldd #398		; set starting screen position (X)
+ ldd #398		; 398 set starting screen position (X)
+* if X is odd, the end is fine, beginning wrong
+* if even the beginning is fine, ending wrong
  std mazeoffx
- ldd #291		; set starting screen position (Y)
+ ldd #290 ;#291 		; set starting screen position (Y)
  std mazeoffy
  rts
 
@@ -26,7 +28,7 @@ LC013	lslb		; shift upper 4 bits of position into A
 	lslb
 	rola
 	lsla		; two bytes per offset
-	ldd a,u		; get offset from start of offset table to the actual data to start rendering
+	ldd a,u		; get offset from start of offset table
 	leau d,u	; point to actual render data
 LC01C	clra		; zero extend next read
 	pulu b		; fetch column number
@@ -100,7 +102,7 @@ VLine	pshs a		; save top coordinate
 LC091	sta ,x		; set pixel for line
 	leax 64,x	; move to next row
 	decb		; done last pixel?
-	bne LC091	; brif not
+	bpl LC091	; brif not
 	rts
 
 LC09A	fcb $60,$06
@@ -168,45 +170,41 @@ LC104	rts
  * A = left X coordinate
  * B = right X coordinate
  * X = Y coordinate
+* if X is odd, the end is fine, beginning wrong
+* if even the beginning is fine, ending wrong
 HLine	pshs a		; save left X coordinate
+ 	lda mazeoffx+1	; line begins on an odd or even X coordinate?
+	anda #1
+	sta odd
+	lda ,s		; get back the left X coordinate
 	exg x,d		; save both coordinates and get vertical offset
 	tfr b,a		; put Y coordinate in A
-	ldb ,s		; get left X coordinate
+	ldb ,s		; left X coordinate in B
 	rolb		; calcuate screen offset
 	lsra
 	rorb
 	lsra
 	rorb
 	ora #$E0	; add screen base
-	exg d,x		; save pointer and get back coordinates
+	exg d,x		; screen pointer goes in X, get back the coordinates
 	subb ,s+	; calculate number of pixels
-	incb		; add one (compensate for decb below)
-	leay LC09A,pcr	; point to pixel bit masks
-	anda #1		; get pixel number in byte
-	lda a,y		; get pixel mask
-	pshs a		; save pixel mask
-LC125	decb		; are we done yet?
-	blt LC148	; brif so
-	lda ,s		; get pixel mask
-	ora ,x		; merge with screen data
-	sta ,x		; save on screen
-	lsr ,s		; shift pixel mask to next pixel
-	lsr ,s
-	lsr ,s
-	lsr ,s
-	bne LC125	; brif we haven't got to the end of the byte
-	leax 1,x	; move to next byte
-	lda #$66	; set up to do whole bytes
-LC138	subb #2		; do we have a whole byte worth?
-	blt LC140	; brif not
-	sta ,x+		; do a whole byte
-	bra LC138	; try again
-LC140	addb #2		; reset for subb above
-	lda #$60	; set up for leftmost pixel in byte
-	sta ,s		; set pixel masks
-	bra LC125	; go complete the line
-LC148	puls a		; clean up stack
-	rts
+	lsrb		; B is now the number of bytes
+* BEGINNING OF LINE
+	tst odd
+	beq even@
+	lda #$06 ; #$06	; odd: single pixel at beginning of line (use 66?)
+	sta ,x+
+* MIDDLE OF LINE
+even@	lda #$66	; set up for whole bytes
+loop@	sta ,x+		; save to screen
+	decb		; done?
+	bne loop@	; brif not
+* END OF LINE
+done@	tst odd	
+	bne exit@
+	lda #$60 ; #$60	; even: single pixel at end of line (use 66?)
+	sta ,x
+exit@	rts
 
 ; The following two tables are indexes into the maze data to short circuit
 ; rendering some lines that are definitely outside the viewable area.

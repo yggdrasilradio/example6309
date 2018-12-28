@@ -30,6 +30,7 @@ mazeoffx rmb 2
 mazeoffy rmb 2
 curposx rmb 1
 curposy rmb 1
+odd	rmb 1
  IFDEF M6809
 sreg	rmb 2
 wreg	rmb 0
