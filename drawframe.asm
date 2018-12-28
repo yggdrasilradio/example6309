@@ -9,9 +9,6 @@ DrawFrame
 ; lda #55
 ; sta $ff9a
 
- * Draw maze walls
- lbsr DoLines
-
  * Bouncing colored dots
  ldu #table
 loop@

@@ -101,9 +101,6 @@ start
  * Initialize MMU
  lbsr InitMMU
 
- * Set starting position
- lbsr SetStartPos
-
  * Seed random number routine
  IFDEF M6309
  tfr v,d	; get seed from nonvolatile storage
@@ -206,6 +203,7 @@ mainloop
  tst joyb	; joystick button pressed?
  beq no@
  * Start laser sound
+ inc mazeoffx+1 ; hold my beer
  leau laser,pcr
  stu sptr
  clr joyb
@@ -285,7 +283,6 @@ no@
  incl laser.asm
  incl sprites.asm
  incl spritedata.asm
- incl lines.asm
 
 SCREEN EQU $E000
 
