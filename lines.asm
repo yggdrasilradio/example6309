@@ -5,7 +5,7 @@ SetStartPos
  ldd #62*256+46		; default screen position (62,46)
  sta curposx		; set horizontal position
  stb curposy		; set vertical position
- ldd #399		; 398 set starting screen position (X)
+ ldd #398		; set starting screen position (X)
 * if X is odd, the end is fine, beginning wrong
 * if even the beginning is fine, ending wrong
  std mazeoffx
@@ -170,8 +170,6 @@ LC104	rts
  * A = left X coordinate
  * B = right X coordinate
  * X = Y coordinate
-* if offset X is even, lines clipped on the right are two pixels too short
-* if offset X is odd, lines clipped on the left are two pixels too short
 HLine	pshs d		; save coordinates
 	anda #1		; figure out if line endpoints are
 	andb #1		; on even or odd coordinates
@@ -188,6 +186,7 @@ HLine	pshs d		; save coordinates
 	ora #$E0	; add screen base
 	exg d,x		; screen pointer goes in X, get back the coordinates
 	subb ,s		; calculate number of pixels
+	incb
 	lsrb		; divide by 2 for the number of bytes
 * BEGINNING OF LINE
 	tst odd1
