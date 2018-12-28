@@ -5,7 +5,7 @@ SetStartPos
  ldd #62*256+46		; default screen position (62,46)
  sta curposx		; set horizontal position
  stb curposy		; set vertical position
- ldd #398		; 398 set starting screen position (X)
+ ldd #399		; 398 set starting screen position (X)
 * if X is odd, the end is fine, beginning wrong
 * if even the beginning is fine, ending wrong
  std mazeoffx
@@ -170,13 +170,13 @@ LC104	rts
  * A = left X coordinate
  * B = right X coordinate
  * X = Y coordinate
-* if X is odd, the end is fine, beginning wrong
-* if even the beginning is fine, ending wrong
-HLine	pshs a		; save left X coordinate
- 	lda mazeoffx+1	; line begins on an odd or even X coordinate?
-	anda #1
-	sta odd
-	lda ,s		; get back the left X coordinate
+* if offset X is even, lines clipped on the right are two pixels too short
+* if offset X is odd, lines clipped on the left are two pixels too short
+HLine	pshs d		; save coordinates
+	anda #1		; figure out if line endpoints are
+	andb #1		; on even or odd coordinates
+	std odd1
+	ldd ,s		; get back the coordinate
 	exg x,d		; save both coordinates and get vertical offset
 	tfr b,a		; put Y coordinate in A
 	ldb ,s		; left X coordinate in B
@@ -187,12 +187,12 @@ HLine	pshs a		; save left X coordinate
 	rorb
 	ora #$E0	; add screen base
 	exg d,x		; screen pointer goes in X, get back the coordinates
-	subb ,s+	; calculate number of pixels
-	lsrb		; B is now the number of bytes
+	subb ,s		; calculate number of pixels
+	lsrb		; divide by 2 for the number of bytes
 * BEGINNING OF LINE
-	tst odd
+	tst odd1
 	beq even@
-	lda #$06 ; #$06	; odd: single pixel at beginning of line (use 66?)
+	lda #$06 	; odd: single pixel at beginning of line
 	sta ,x+
 * MIDDLE OF LINE
 even@	lda #$66	; set up for whole bytes
@@ -200,11 +200,11 @@ loop@	sta ,x+		; save to screen
 	decb		; done?
 	bne loop@	; brif not
 * END OF LINE
-done@	tst odd	
+done@	tst odd2	
 	bne exit@
-	lda #$60 ; #$60	; even: single pixel at end of line (use 66?)
+	lda #$60	; 60 even: single pixel at end of line
 	sta ,x
-exit@	rts
+exit@	puls d,pc
 
 ; The following two tables are indexes into the maze data to short circuit
 ; rendering some lines that are definitely outside the viewable area.

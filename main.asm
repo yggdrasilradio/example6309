@@ -1,4 +1,5 @@
  opt c
+
  setdp 0
 
  org $0
@@ -30,7 +31,8 @@ mazeoffx rmb 2
 mazeoffy rmb 2
 curposx rmb 1
 curposy rmb 1
-odd	rmb 1
+odd1	rmb 1
+odd2	rmb 1
  IFDEF M6809
 sreg	rmb 2
 wreg	rmb 0
