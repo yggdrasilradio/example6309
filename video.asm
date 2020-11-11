@@ -272,12 +272,12 @@ FlipScreens
  lbsr WaitForVSync
  com tick
  bne task0@
- bsr Screen1
- bsr Task0
+ bsr Screen1	; display screen 1
+ bsr Task0	; draw on screen 0
  rts
 task0@
- bsr Screen0
- bsr Task1
+ bsr Screen0	; display screen 0
+ bsr Task1	; draw on screen 1
  rts
 
 Task0
