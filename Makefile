@@ -1,6 +1,4 @@
 #
-# Example program
-#
 # make		Build 6309 version
 # make clean	Remove all binary and listing files
 # make 6809	Build 6809 version
