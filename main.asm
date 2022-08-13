@@ -19,12 +19,14 @@ lastb	rmb 1
 joyb	rmb 1
 sptr	rmb 2
 temp	rmb 1
+* FIREBALL
 xfire	rmb 1
 yfire	rmb 1
-xfired	rmb 1
+xfired	rmb 1	; direction
+* SPIDER
 xspid	rmb 1
 yspid	rmb 1
-xspidd	rmb 1
+xspidd	rmb 1	; direction
  IFDEF M6809
 sreg	rmb 2
 wreg	rmb 0
@@ -82,6 +84,7 @@ start
  std sptr
 
  * Clear joystick fire button flag
+ sta joyb
  sta joyf
 
  * Turn off ROMs
@@ -192,6 +195,8 @@ mainloop
 ; lda #100
 ; sta $ff9a
 
+ lbsr DrawFrame
+
  tst joyb	; joystick button pressed?
  beq no@
  * Start laser sound
@@ -209,16 +214,6 @@ mainloop
  tfr d,y
  lbsr AddSprite
 no@
-
-; ldd sptr  ; is sound being played?
-; beq no@
-; lda #100  ; if so, set border to red
-;no@
-; sta $ff9a ; otherwise set to black
-
- * BEGIN SCREEN DRAWING
- lbsr DrawFrame
- * END SCREEN DRAWING
 
 * Turn off border (DEBUG)
 ; lda #0

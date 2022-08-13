@@ -1,5 +1,9 @@
 JOYDEADZONE EQU 8 ; total deadzone is 8/64 (this number must be even)
 
+; ReadJoystick
+; fire buttons in A
+; coords in joyx, joyy
+
 ReadJoystick
  * LEFT JOYSTICK X AXIS
  lda $FF03	; set axis 0
@@ -56,7 +60,7 @@ YLow@
  lda #$FF	; UP
  sta joyy
 EndJoyY@
- * LEFT JOYSTICK BUTTON
+ * JOYSTICK BUTTON
  lda #$FF
  sta $FF02	; set all keyboard column outputs to 1, to ignore keypresses
  lda $FF00

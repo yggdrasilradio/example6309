@@ -9,7 +9,7 @@ DrawFrame
 ; lda #55
 ; sta $ff9a
 
- * Bouncing colored dots
+ * Draw bouncing colored dots
  ldu #table
 loop@
  * BOUNCE X
@@ -43,6 +43,7 @@ no4@
  adda DOT.YDELTA,u
  sta DOT.YPOS,u
  lda DOT.COLOR,u
+ beq loop@	; inactive dot
  sta color
  lda DOT.YPOS,u
  ldb DOT.XPOS,u
@@ -144,14 +145,14 @@ no@
  lda #10
  lbsr DrawSprite
 
+ * Draw scheduled sprites
+ lbsr DrawSprites
+
  * Draw targeting reticule
  leau reticule,pcr
  ldb xcurs
  lda ycurs
  lbsr DrawSprite
-
- * Draw scheduled sprites last
- lbsr DrawSprites
 
  * END SCREEN DRAWING
 

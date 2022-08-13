@@ -22,22 +22,22 @@ disable6309
 
 * Set CPU to 1.79 Mhz
 fast
- sta $FFD9
+ sta $ffd9
  rts
 
 * Set CPU to 0.89 Mhz
 slow
- sta $FFD8
+ sta $ffd8
  rts
 
 * Map system ROMs into memory
 romson
- sta $FFDE
+ sta $ffde
  rts
 
 * Take system ROMs out of memory map, set all-RAM mode
 romsoff
- sta $FFDF
+ sta $ffdf
  rts
 
 * Hard boot to RSDOS
@@ -104,9 +104,9 @@ InitMMU
  rts
 
 
-;        FFA0 FFA1 FFA2 FFA3 FFA4 FFA5 FFA6 FFA7
-;Task 0: $38  $39  $3A  $3B  $3C  $3D  $3E  $3F
-;	 0000 2000 4000 6000 8000 A000 C000 E000
+;        FFA0 FFA1 FFA2 FFA3 FFA4 FFA5 FFA6 FFA7  MMU registers
+;Task 0: $38  $39  $3A  $3B  $3C  $3D  $3E  $3F   values
+;	 0000 2000 4000 6000 8000 A000 C000 E000  memory segments
 
 taskmap0
  fdb $3839
@@ -159,7 +159,6 @@ InitIRQ
  * Enable TIMER
  ldd #459	; timer value (12 bit) 459 = 7798Hz
  std $ff94
-
  rts
 
 SndOff
