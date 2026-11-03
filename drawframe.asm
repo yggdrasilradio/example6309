@@ -108,13 +108,13 @@ no@
  ldd xcurs ; update cursor location
  adda joyx
  addb joyy
- cmpa #1 ; x from 1 to 119
+ cmpa #1 ; clip x, from 1 to 119
  bhs >
  lda #1
 ! cmpa #119
  bls >
  lda #119
-! cmpb #9 ; y from 9 to 87
+! cmpb #9 ; clip y, from 9 to 87
  bhs >
  ldb #9
 ! cmpb #87
