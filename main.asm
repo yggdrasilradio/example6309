@@ -177,9 +177,9 @@ no@
  sta yfire
  stb xfire
  lda #1
- stb xspidd
+ sta xspidd
  lda #$ff
- stb xfired
+ sta xfired
 
  * Initialize IRQ routine
  lbsr InitIRQ
